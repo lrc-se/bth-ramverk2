@@ -1,0 +1,23 @@
+<%
+
+var menu = [
+    {
+        title: "Start",
+        route: "/"
+    },
+    {
+        title: "Om",
+        route: "/about"
+    },
+    {
+        title: "Redovisningar",
+        route: "/report"
+    }
+];
+
+-%>
+<ul>
+<% for(var item of menu) { -%>
+    <li><a href="<%= item.route %>"><%= item.title %></a></li>
+<% } -%>
+</ul>

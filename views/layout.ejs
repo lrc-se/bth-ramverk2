@@ -6,6 +6,18 @@
     <title><%= title %></title>
 </head>
 <body>
+<header>
+    <nav>
+<%- include("nav") -%>
+    </nav>
+</header>
+<main>
+    <article>
 <%- include(view, data) -%>
+    </article>
+</main>
+<footer>
+    <p>© <%= new Date().getFullYear() %><br><a href="mailto:kabc16@student.bth.se">Kalle Brisland</a></p>
+</footer>
 </body>
 </html>
