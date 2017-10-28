@@ -3,7 +3,6 @@
 "use strict";
 
 const express = require("express");
-//const ejs = require("ejs");
 const path = require("path");
 
 var app = express();
@@ -12,8 +11,9 @@ app.set("view engine", "ejs");
 app.use(express.static(path.join(__dirname, "static")));
 
 
-function renderLayout(res, view, title, data) {
+function renderLayout(req, res, view, title, data) {
     res.render("layout", {
+        req: req,
         view: view,
         title: title || "",
         data: data || {}
@@ -22,15 +22,15 @@ function renderLayout(res, view, title, data) {
 
 
 app.get("/", function(req, res) {
-    renderLayout(res, "index", "Kalles sida");
+    renderLayout(req, res, "index", "Kalles sida");
 });
 
 app.get("/about", function(req, res) {
-    renderLayout(res, "about", "Om webbplatsen");
+    renderLayout(req, res, "about", "Om webbplatsen");
 });
 
 app.get("/report", function(req, res) {
-    renderLayout(res, "report", "Redovisningar");
+    renderLayout(req, res, "report", "Redovisningar");
 });
 
 app.use(function(req, res, next) {
