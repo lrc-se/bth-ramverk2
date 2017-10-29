@@ -4,19 +4,22 @@
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <title><%= title %></title>
+    <link href="/css/style.css" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css?family=Passion+One:400%7CRoboto+Condensed:400,400i,700,700i" rel="stylesheet">
 </head>
 <body>
-<header>
-    <nav>
+<header class="wrap">
+    <nav id="menu">
 <%- include("nav", {req: req}) -%>
     </nav>
 </header>
-<main>
+<main class="wrap">
     <article>
 <%- include(view, data) -%>
     </article>
 </main>
-<footer>
+<footer class="wrap">
+    <hr>
     <p>© <%= new Date().getFullYear() %><br><a href="mailto:kabc16@student.bth.se">Kalle Brisland</a></p>
 </footer>
 </body>
