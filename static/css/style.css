@@ -103,6 +103,18 @@ h6 {
 }
 
 
+#title {
+    position: relative;
+}
+
+#title > img:last-child {
+    position: absolute;
+    left: 50%;
+    top: 50%;
+    max-width: 50%;
+    transform: translate(-50%, -50%);
+}
+
 nav {
     background-color: #000;
 }
