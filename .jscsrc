@@ -6,7 +6,7 @@
 	"disallowTabs": true,
 	"validateLineBreaks": "LF",
 	"requireLineFeedAtFileEnd": true,
-	"disallowTrailingWhitespace": true,
+	"disallowTrailingWhitespace": false,
 
 	"requireSemicolons": true,
 
@@ -86,7 +86,7 @@
 	"disallowSpaceAfterObjectKeys": true,
 	"requireSpaceBeforeObjectValues": true,
 	"disallowPaddingNewlinesInBlocks": true,
-	"requirePaddingNewLineAfterVariableDeclaration": true,
+	"requirePaddingNewLineAfterVariableDeclaration": false,
 	"requirePaddingNewLinesAfterUseStrict": true,
 	"validateParameterSeparator": ", ",
 
