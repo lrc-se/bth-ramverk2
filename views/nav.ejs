@@ -18,6 +18,6 @@ var menu = [
 -%>
 <ul>
 <% for(var item of menu) { -%>
-    <li<%= (req.route.path == item.route ? ' class="active"' : "") %>><a href="<%= item.route %>"><%= item.title %></a></li>
+    <li<%= (req.route && req.route.path == item.route ? ' class="active"' : "") %>><a href="<%= item.route %>"><%= item.title %></a></li>
 <% } -%>
 </ul>
