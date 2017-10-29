@@ -1,14 +1,15 @@
 {
-  "name": "rv2",
+  "name": "ramverk2",
   "version": "1.0.0",
   "description": "Base repo for ramverk2",
   "main": "index.js",
   "scripts": {
     "start": "node index.js",
+    "stop": "taskkill /f /im node.exe",
     "test": "echo \"Error: no test specified\" && exit 1"
   },
   "author": "LRC",
-  "license": "ISC",
+  "license": "",
   "devDependencies": {
     "clean-css-cli": "^4.1.10",
     "codecov": "^3.0.0",
