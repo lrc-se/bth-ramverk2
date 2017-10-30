@@ -9,7 +9,63 @@
 </ul>
 <section id="kmom01">
     <h2>Kmom01</h2>
-    <p>blubb</p>
+    <p>
+        Bland det första jag gjorde, efter att ha <a href="https://dbwebb.se/forum/viewtopic.php?f=60&t=6979">erhållit tillstånd</a>, var att slänga ut Pug. 
+        Det känns bara onödigt och framför allt <em>ineffektivt</em> att lägga på ytterligare lager ovanpå existerande tekniker, med därtill hörande begränsningar, bara för sakens skull – 
+        jag vill se vad jag gör och ha hela min verktygslåda till hands utan att behöva göra allsköns krumbukter för att komma åt den. 
+        Hela tanken med s.k. "logiklösa mallar" är dessutom i mitt tycke fel i grunden: man bör visserligen inte ha <em>affärslogik</em> i sina vyer, 
+        men det mesta utöver de mest basala tillämpningarna kommer att kräva <em>presentationslogik</em> – och att då behöva flytta ut denna <em>från</em> 
+        presentationslagret bara för att mallsystemet inte stöder den fullt ut är bara kontraproduktivt och upphäver sitt eget syfte.
+    </p>
+    <p>
+        Efter att ha gått igenom <a href="https://github.com/expressjs/express/wiki#template-engines">hela listan</a> på tillgängliga vymotorer föll mitt val slutligen på 
+        <a href="http://ejs.co/">EJS</a>, mycket på grund av de anledningar som nämns på dess webbplats. Kort sagt, och återigen, 
+        det finns ingen anledning att dra in (och behöva lära sig) ett helt nytt mallspråk som varken ser ut eller känns som HTML (t.ex. Pug/HAML) 
+        eller kontroll&shy;strukturer som varken ser ut eller känns som JavaScript (t.ex. Nunjucks/Jinja2) – åtminstone inte i en kurs som använder sig av just HTML och JavaScript.
+    </p>
+    <p>
+        Med EJS blir tvärtom allt hur enkelt som helst, särskilt i och med att man med Node har tillgång till förenkla(n)de ES6-konstruktioner, och det är bara att köra på. 
+        Det finns dock en begränsning i att det saknas inbyggt stöd för layoutfiler, så jag byggde till ett eget minimalt system för detta, på likartat sätt som i <strong>ramverk1</strong> 
+        (se vidare nedan). Stilsättningen är den här gången avskalad och sparsam.
+    </p>
+    <p>
+        När det kommer till Express känns det mesta igen. Ett ramverk är ett ramverk och de ingående delarna är av nödvändighet likartade – 
+        det finns ett begränsat antal sätt att lösa ett och samma problem på, oavsett plattform och teknik. Det som är specifikt i det här fallet är hur komponenterna samverkar och anropas, 
+        vilket i sin tur känns igen från <strong>linux</strong>-kursen och Node-servrarna där, men det rör sig i grund och botten av samma beståndsdelar som används på samma sätt rent principiellt. 
+        Något som dock skiljer är hur man skapar och hanterar <em>middleware</em>-kedjor och sedan blir tonvikten på funktioner (och funktionsobjekt) 
+        liksom det asynkrona upplägget större i och med att det rör sig om JS.
+    </p>
+    <p>
+        Att Express också innehåller ett inbyggt (och tämligen enkelt) system för vyhantering är också positivt, 
+        eftersom det gör det lätt att själva välja teknik enligt ovan utan att behöva ändra någonting i den anropande koden. Universella gränssnitt är bra, 
+        även om det kanske kunde funnits fler (eller ens några) likaledes universella möjligheter att göra/<wbr>skicka med inställningar. 
+        Sedan hade ju jag föredragit att man valt någon annan standardmotor än just Jade/Pug, särskilt i och med att denna är ett sådant stort avsteg från både JS och HTML.
+    </p>
+    <h5>Berätta om din katalogstruktur och hur du organiserade din kod. Hur tänkte du?</h5>
+    <p>
+        Min statiska filer ligger i <i>static/</i> och mina vyer i <i>views/</i>. Vad gäller själva applikationskoden har jag skapat en katalog <i>app/</i> 
+        som för tillfället innehåller två filer: <i>app.js</i> och <i>util.js</i>. Den förstnämnda skapar och exporterar <code>app</code>-objektet medan den sistnämnda innehåller gemensamma funktioner 
+        (just nu endast layoutfunktionen till EJS).
+    </p>
+    <p>
+        I <i>routes/</i> ligger dels routefunktionerna i egna filer (just nu endast en: <i>default.js</i>) och dels <i>routes.js</i> 
+        som använder de övriga filerna för att konfigurera de olika sökvägarna utifrån valda grundsökvägar. Upplägget påminner en del om det i <strong>ramverk1</strong> 
+        och det är <i>app/app.js</i> ovan som ansvarar för att kicka igång denna procedur (med lite DI-tänk).
+    </p>
+    <p>
+        Min <i>index.js</i> är, slutligen, högst minimal och startar i princip bara servern. Sammanfattningsvis är koden starkt modulariserad där varje del är begränsad i sitt omfång, 
+        vilket alltså även inkluderar distributionen mellan katalogerna.
+    </p>
+    <h5>Använde du någon form av scaffolding som Express erbjuder?</h5>
+    <p>
+        Nej, men jag kikade lite på den genererade koden och anammade/<wbr>anpassade vissa saker därifrån. 
+        Här föredrog jag alltså att bygga en egen grund från början istället för att backa tillbaka från och modifiera en färdig struktur jag inte skulle varit fullt ut bekväm med, 
+        vilket annars skulle blivit fallet.
+    </p>
+    <h5>Jobbar du med Markdown för innehållet, eller annat liknande?</h5>
+    <p>
+        Nej, jag tycker det mest är skönt att slippa ifrån det, då jag upplever det som alltför begränsande. Jag föredrar vanlig HTML alla dagar i veckan.
+    </p>
 </section>
 <section id="kmom02">
     <h2>Kmom02</h2>
