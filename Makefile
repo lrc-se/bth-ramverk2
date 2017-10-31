@@ -57,6 +57,7 @@ CSSLINT   := $(NODEMODBIN)/csslint
 STYLELINT := $(NODEMODBIN)/stylelint
 JSCS      := $(NODEMODBIN)/jscs
 ESLINT    := $(NODEMODBIN)/eslint
+EJSLINT   := $(NODEMODBIN)/ejslint
 JSONLINT  := $(NODEMODBIN)/jsonlint
 JSYAML    := $(NODEMODBIN)/js-yaml
 HTMLMINI  := $(NODEMODBIN)/html-minifier
@@ -123,7 +124,7 @@ check: check-tools-js #check-tools-bash check-tools-php
 
 # target: test               - Run all tests.
 .PHONY: test
-test: htmlhint stylelint jscs eslint #jsunittest #csslint
+test: htmlhint stylelint jscs eslint ejslint #jsunittest #csslint
 	@$(call HELPTEXT,$@)
 	[ ! -f composer.json ] || composer validate
 
@@ -268,6 +269,14 @@ eslint:
 eslint-fix:
 	@$(call HELPTEXT,$@)
 	[ ! -f .eslintrc.json ] || $(ESLINT) --fix .
+
+
+
+# target: ejslint            - EJS template linter.
+.PHONY: ejslint
+ejslint:
+	@$(call HELPTEXT,$@)
+	$(EJSLINT) **/*.ejs
 
 
 

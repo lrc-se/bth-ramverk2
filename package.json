@@ -15,6 +15,7 @@
     "codecov": "^3.0.0",
     "coveralls": "^3.0.0",
     "csslint": "^1.0.5",
+    "ejs-lint": "^0.3.0",
     "eslint": "^4.10.0",
     "eslint-plugin-react": "^7.4.0",
     "html-minifier": "^3.5.6",
