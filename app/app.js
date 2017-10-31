@@ -1,3 +1,9 @@
+/**
+ * Express application.
+ *
+ * @module  app/app
+ */
+
 "use strict";
 
 const express = require("express");

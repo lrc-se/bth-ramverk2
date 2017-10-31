@@ -1,5 +1,9 @@
 #!/usr/bin/env node
 
+/**
+ * Web application startup.
+ */
+
 "use strict";
 
 var app = require("./app/app");
