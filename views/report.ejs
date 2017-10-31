@@ -26,24 +26,38 @@
     <p>
         Med EJS blir tvärtom allt hur enkelt som helst, särskilt i och med att man med Node har tillgång till förenkla(n)de ES6-konstruktioner, och det är bara att köra på. 
         Det finns dock en begränsning i att det saknas inbyggt stöd för layoutfiler, så jag byggde till ett eget minimalt system för detta, på likartat sätt som i <strong>ramverk1</strong> 
-        (se vidare nedan). Vad gäller själva webbplatsen som sådan är stilsättningen den här gången avskalad och sparsam.
+        (se vidare nedan). Vad gäller själva webbplatsen som sådan är stil&shy;sättningen den här gången avskalad och sparsam.
     </p>
+    <p>
+        Integrationen mot de externa tjänsterna gick lika smärtfritt som i den förra kursen. Jag valde Scrutinizer för kodkvalitets&shy;biten i och med att vi redan använt den där, 
+        så får vi se om den duger fullt ut även här. Jag passade också på att introducera ett nytt validerings&shy;verktyg (<a href="https://www.npmjs.com/package/ejs-lint">ejs-lint</a>) 
+        för EJS-mallarna, som nu ingår i min <code>make test</code>-svit. CSSLint och JSCS har dock fått stryka på foten och jag har gjort några smärre ingrepp i ESLints konfiguration.
+    </p>
+    <p>
+        Slutligen har jag gjort försök med att köra applikationen publikt på studentservern (en av de två, i alla fall), vilket efter lite om och men verkar fungera. 
+        Förut&shy;sättningen är att man (jag) kör <code>npm install</code> efter varje publicering för att återställa utvecklings&shy;miljön, 
+        men det kanske man får ta; det är ju alltid trevligt att kunna visa upp det man gör och inte bara skriva om det.
+    </p>
+    <h5>Om Express och vymotorer</h5>
     <p>
         När det kommer till Express känns det mesta igen. Ett ramverk är ett ramverk och de ingående delarna är av nödvändighet likartade – 
         det finns ett begränsat antal sätt att lösa ett och samma problem på, oavsett plattform och teknik. Det som är specifikt i det här fallet är hur komponenterna samverkar och anropas, 
-        vilket i sin tur känns igen från <strong>linux</strong>-kursen och Node-servrarna där, men det rör sig i grund och botten om samma beståndsdelar som används på samma sätt rent principiellt. 
+        vilket i sin tur känns igen från <strong>linux</strong>-kursen och Node-servrarna där, men det rör sig i grund och botten om samma beståndsdelar som används på samma sätt rent principiellt.
+    </p>
+    <p>
         Något som dock skiljer är hur man skapar och hanterar <em>middleware</em>-kedjor och sedan blir tonvikten på funktioner (och funktions&shy;objekt) 
-        liksom det asynkrona upplägget större i och med att det rör sig om JS.
+        liksom det asynkrona upplägget större i och med att det rör sig om JS. Dessutom är ramverket här också sin egen webbserver, vilket inte är fallet med ramverk för t.ex. PHP eller ASP.NET, 
+        som körs som tjänster i en separat webbserver&shy;applikation.
     </p>
     <p>
         Att Express också innehåller ett inbyggt (och tämligen enkelt) system för vyhantering är också positivt, 
-        eftersom det gör det lätt att själva välja teknik enligt ovan utan att behöva ändra någonting i den anropande koden. Universella gränssnitt är bra, 
+        eftersom det gör det lätt att själv välja teknik enligt ovan utan att behöva ändra någonting i den anropande koden. Universella gränssnitt är bra, 
         även om det kanske kunde funnits fler (eller ens några) likaledes universella möjligheter att göra/<wbr>skicka med inställningar. 
-        Sedan hade ju jag föredragit att man valt någon annan standardmotor än just Jade/Pug, särskilt i och med att denna utgör ett sådant stort avsteg från både JS och HTML.
+        Sedan hade ju jag föredragit att man valt någon annan standard&shy;motor än just Jade/Pug, särskilt i och med att denna utgör ett sådant stort avsteg från både JS och HTML.
     </p>
     <h5>Berätta om din katalog&shy;struktur och hur du organiserade din kod. Hur tänkte du?</h5>
     <p>
-        Min statiska filer ligger i <i>static/</i> och mina vyer i <i>views/</i>. Vad gäller själva applikations&shy;koden har jag skapat en katalog <i>app/</i> 
+        Mina statiska filer ligger i <i>static/</i> och mina vyer i <i>views/</i>. Vad gäller själva applikations&shy;koden har jag skapat en katalog <i>app/</i> 
         som för tillfället innehåller två filer: <i>app.js</i> och <i>util.js</i>. Den förstnämnda skapar och exporterar <code>app</code>-objektet medan den sistnämnda innehåller gemensamma funktioner 
         (just nu endast layout&shy;funktionen till EJS).
     </p>
@@ -64,7 +78,7 @@
     </p>
     <h5>Jobbar du med Markdown för innehållet, eller annat liknande?</h5>
     <p>
-        Nej, jag tycker det mest är skönt att slippa ifrån det, då jag upplever det som alltför begränsande. Jag föredrar vanlig HTML alla dagar i veckan.
+        Nej, jag tycker det mest är skönt att slippa ifrån det, då jag upplever det som alltför begränsande. Ge mig vanlig HTML alla dagar i veckan.
     </p>
 </section>
 <section id="kmom02">
