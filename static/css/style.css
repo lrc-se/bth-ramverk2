@@ -3,6 +3,7 @@
 }
 
 html {
+    background-color: #fff;
     font-size: 16px;
 }
 
@@ -170,6 +171,7 @@ article {
 footer {
     padding: 0 2em 1em;
     color: #888;
+    background-color: #fff;
     text-align: center;
 }
 
