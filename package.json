@@ -6,7 +6,12 @@
   "scripts": {
     "start": "node index.js",
     "stop": "taskkill /f /im node.exe",
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "test": "npm run lint",
+    "htmlhint": "node_modules/.bin/htmlhint --ignore build/**,node_modules/** | grep -v \"Config loaded:\"",
+    "stylelint": "node_modules/.bin/stylelint **/*.css",
+    "eslint": "node_modules/.bin/eslint .",
+    "ejslint": "node_modules/.bin/ejslint views/**/*.ejs",
+    "lint": "npm-run-all -c htmlhint stylelint eslint ejslint"
   },
   "author": "LRC",
   "license": "",
@@ -24,6 +29,7 @@
     "jscs": "^3.0.7",
     "jsonlint": "^1.6.2",
     "mocha": "^4.0.1",
+    "npm-run-all": "^4.1.1",
     "nyc": "^11.2.1",
     "stylelint": "^8.2.0",
     "uglify-js": "^3.1.5"
