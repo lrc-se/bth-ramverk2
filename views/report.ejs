@@ -83,7 +83,67 @@
 </section>
 <section id="kmom02">
     <h2>Kmom02</h2>
-    <p>blubb</p>
+    <p>
+        Jag insåg ganska snabbt att jag inte kunde köra varken Docker for Windows <em>eller</em> Docker Toolbox (ja, jag är säker), så jag började utforska andra sätt att komma vidare på. 
+        Eftersom dokumentationen för Toolbox tydligt säger att det verktyget inkluderar VirtualBox, för att skapa en Linux-VM som kör Dockermotorn, som i sin tur kör behållaren som <em>i sin tur</em>
+        kör det man egentligen vill köra, så tänkte jag att jag borde kunna använda min existerande Debian-VM i just VirtualBox från <b>linux</b>-kursen i våras direkt istället.
+    </p>
+    <p>
+        Jag startade därför upp denna och följde instruktionerna för att installera Docker CE för Debian, vilket förlöpte väl. 
+        Efter att ha installerat Docker Compose separat visade det sig sedan att allting faktiskt fungerade som det skulle, trots alla dessa upprepade abstraktioner – 
+        det är som en rysk docka, eller Inception om man så vill. Sedan behövdes det en del hand&shy;påläggning för att få till de öppna portarna och synkningen med det ordinarie kursrepot, 
+        men det var småsaker i jämförelse. Så nu kör jag Node i Linux i Docker i Linux i VirtualBox i Windows...
+    </p>
+    <p>
+        PHP-behållarna i <i>kmom02/docker</i> använder version 5.6, 7.0 och 7.1 och det finns en <i>index.php</i> i samma katalog som kort och gott kör <code>phpinfo()</code>, 
+        vilket gör det enkelt att bekräfta att det verkligen är rätt version som svarar. Node-behållarna kör version 4, 8 och 9, 
+        där den förstnämnda av någon anledning är betydligt segare att både starta och avsluta, men alla tre fungerar bra. I båda fallen gäller att behållarna svarar på port 8101, 8102 respektive 8103.
+    </p>
+    <p>
+        I övrigt har jag som flera andra uppdaterat repot (inklusive Travis-integrationen) till att använda <code>npm</code> istället för <code>make</code>, 
+        vilket dock medförde att jag behövde lägga till <a href="https://www.npmjs.com/package/npm-run-all"><code>npm-run-all</code></a> 
+        som ett beroende eftersom det annars inte går att få <code>npm</code> att köra flera skript i följd på ett sätt som fungerar konsekvent på både Windows (mitt system) och Linux 
+        (dbwebb och de externa tjänsterna).
+    </p>
+    <p>
+        Jag har lagt till skripten <code>htmlhint</code>, <code>stylelint</code>, <code>eslint</code> och <code>ejslint</code>, som motsvarar dem som tidigare kördes i makefilen, 
+        samt ett samlande skript <code>lint</code> som kör dessa i följd (och inte avbryter exekveringen om ett av dem fallerar). Slutligen har jag uppdaterat <code>npm test</code> 
+        som för närvarande bara kör just <code>npm run lint</code>, men tanken är att det skall in fler steg i den sekvensen vad det lider.
+    </p>
+    <h5>Har du jobbat med Docker eller andra virtuali&shy;serings&shy;tekniker innan?</h5>
+    <p>
+        Docker är nytt, men jag har tidigare använt VirtualBox för flera olika gäst-OS, så konceptet som sådant är jag bekant med.
+    </p>
+    <h5>Hur ser du på möjligheterna att använda dig av Docker för att jobba med test av ditt repo?</h5>
+    <p>
+        Ärligt talat känns det mest som en massa onödigt krångel, särskilt eftersom vi/jag (åtminstone så långt) inte har något reellt behov av att köra flera parallella versioner. 
+        Det blir bara lager på lager på lager och det är symptomatiskt att även det <em>officiella</em> sättet att köra Docker på allt annat än de senaste versionerna av Windows och MacOS 
+        (med Docker Toolbox) innebär virtualisering i flera steg, vilket knappast (läs: definitivt inte) är resurs&shy;effektivt någonstans.
+    </p>
+    <p>
+        Så nej, jag är inte särskilt imponerad så långt (annat än av att det över huvud taget fungerar) och har svårt att se nyttan i det här fallet. Kanske det kommer? 
+        Annars känns det mest som ännu ett i en lång rad av påbjudna saker som egentligen är gjorda för Unix/Linux och bara med nöd och näppe går att tvinga in på andra plattformar. 
+        Dbwebbs redan kraftiga slagsida åt vad som anses som <em>rätt och riktigt</em> blir allt tydligare...
+    </p>
+    <h5>Gick allt smidigt eller stötte du på problem?</h5>
+    <p>
+        Det största problemet var alltså att jag inte kunde installera Docker över huvud taget på vanligt sätt, men den alternativa vägen som beskrivs ovan fungerade oväntat bra – 
+        faktiskt har allt fungerat felfritt från första stund. Uppenbarligen ligger det en hel del arbete bakom dessa verktyg, 
+        även om det kanske inte egentligen är meningen att de skall användas på just det här sättet.
+    </p>
+    <p>
+        Det enda lilla hindret jag stötte på var att <a href="https://github.com/nodejs/docker-node/blob/master/README.md#how-to-use-this-image">den officiella dokumentationen</a> 
+        för hur man skulle konfigurera <code>docker-node</code> med Docker Composer inte fungerade – servern gick inte att nå utifrån – 
+        så jag ändrade lite i formatet i konfigfilen för att bättre överens&shy;stämma med det i 
+        <a href="https://dbwebb.se/kunskap/kom-igang-med-docker-som-utvecklingsmiljo#docker-compose">dbwebb-exemplet</a> istället, 
+        som jag redan visste lirade med PHP. Efter det fungerade allt som det skulle.
+    </p>
+    <h5>Skapade du din egen image? Berätta om den.</h5>
+    <p>
+        Nej, det kändes inte motiverat i det här skedet – och särskilt inte att <em>publicera</em> någonting som bara är menat som ett test. 
+        Jag är för övrigt fortsatt starkt emot krav som innebär just krav på att registrera sig hos tjänster man inte själv valt och 
+        att där göra saker publikt tillgängliga som man själv inte tycker borde vara det.
+    </p>
 </section>
 <section id="kmom03">
     <h2>Kmom03</h2>
