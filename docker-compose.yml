@@ -11,6 +11,7 @@ services:
         ports:
             - "8101:8101"
         command: "npm start"
+        
     node8:
         image: "node:8"
         user: "node"
@@ -22,6 +23,7 @@ services:
         ports:
             - "8102:8102"
         command: "npm start"
+        
     node9:
         image: "node:9"
         user: "node"
@@ -33,4 +35,3 @@ services:
         ports:
             - "8103:8103"
         command: "npm start"
-

@@ -85,19 +85,20 @@
     <h2>Kmom02</h2>
     <p>
         Jag insåg ganska snabbt att jag inte kunde köra varken Docker for Windows <em>eller</em> Docker Toolbox (ja, jag är säker), så jag började utforska andra sätt att komma vidare på. 
-        Eftersom dokumentationen för Toolbox tydligt säger att det verktyget inkluderar VirtualBox, för att skapa en Linux-VM som kör Dockermotorn, som i sin tur kör behållaren som <em>i sin tur</em>
-        kör det man egentligen vill köra, så tänkte jag att jag borde kunna använda min existerande Debian-VM i just VirtualBox från <b>linux</b>-kursen i våras direkt istället.
+        Eftersom dokumentationen för Toolbox tydligt säger att det verktyget inkluderar VirtualBox, för att skapa en Linux-VM som kör Docker&shy;motorn, som i sin tur kör behållaren som 
+        <em>i sin tur</em> kör det man egentligen vill köra, så tänkte jag att jag borde kunna använda min existerande Debian-VM i just VirtualBox från <b>linux</b>-kursen i våras direkt istället.
     </p>
     <p>
         Jag startade därför upp denna och följde instruktionerna för att installera Docker CE för Debian, vilket förlöpte väl. 
-        Efter att ha installerat Docker Compose separat visade det sig sedan att allting faktiskt fungerade som det skulle, trots alla dessa upprepade abstraktioner – 
-        det är som en rysk docka, eller Inception om man så vill. Sedan behövdes det en del hand&shy;påläggning för att få till de öppna portarna och synkningen med det ordinarie kursrepot, 
+        Efter att sedan ha installerat Docker Compose separat visade det sig att allting faktiskt fungerade som det skulle, trots alla dessa upprepade abstraktioner – 
+        det är som en rysk docka, eller <i>Inception</i> om man så vill. Sedan behövdes det en del hand&shy;påläggning för att få till de öppna portarna och synkningen med det ordinarie kursrepot, 
         men det var småsaker i jämförelse. Så nu kör jag Node i Linux i Docker i Linux i VirtualBox i Windows...
     </p>
     <p>
         PHP-behållarna i <i>kmom02/docker</i> använder version 5.6, 7.0 och 7.1 och det finns en <i>index.php</i> i samma katalog som kort och gott kör <code>phpinfo()</code>, 
         vilket gör det enkelt att bekräfta att det verkligen är rätt version som svarar. Node-behållarna kör version 4, 8 och 9, 
-        där den förstnämnda av någon anledning är betydligt segare att både starta och avsluta, men alla tre fungerar bra. I båda fallen gäller att behållarna svarar på port 8101, 8102 respektive 8103.
+        där den förstnämnda av någon anledning är betydligt segare att både starta och avsluta, men alla tre fungerar bra. Jag tog även bort den föreslagna miljö&shy;variabeln, 
+        så att Node fortsatt kör i utvecklings&shy;läge för att fel&shy;meddelanden skall framgå. För båda momenten gäller att behållarna svarar på port 8101, 8102 respektive 8103.
     </p>
     <p>
         I övrigt har jag som flera andra uppdaterat repot (inklusive Travis-integrationen) till att använda <code>npm</code> istället för <code>make</code>, 
@@ -123,7 +124,7 @@
     <p>
         Så nej, jag är inte särskilt imponerad så långt (annat än av att det över huvud taget fungerar) och har svårt att se nyttan i det här fallet. Kanske det kommer? 
         Annars känns det mest som ännu ett i en lång rad av påbjudna saker som egentligen är gjorda för Unix/Linux och bara med nöd och näppe går att tvinga in på andra plattformar. 
-        Dbwebbs redan kraftiga slagsida åt vad som anses som <em>rätt och riktigt</em> blir allt tydligare...
+        Dbwebbs redan kraftiga slagsida ifråga om vad som anses som <em>rätt och riktigt</em> blir allt tydligare...
     </p>
     <h5>Gick allt smidigt eller stötte du på problem?</h5>
     <p>
