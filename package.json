@@ -6,10 +6,9 @@
   "scripts": {
     "start": "node index.js",
     "stop": "taskkill /f /im node.exe",
-    "pretest": "npm run lint",
-    "test": "npm run tap",
-    "posttest": "node_modules/.bin/tap --coverage-report=clover",
+    "test": "npm-run-all -c lint tap",
     "tap": "node_modules/.bin/tap -c --reporter=spec --coverage --coverage-report=html --no-browser test/*.js",
+    "tap-clover": "node_modules/.bin/tap --reporter=tap --coverage --coverage-report=clover test/*.js",
     "htmlhint": "node_modules/.bin/htmlhint --ignore node_modules/**,coverage/** | grep -v \"Config loaded:\"",
     "stylelint": "node_modules/.bin/stylelint --ignore-pattern coverage/**/*.css **/*.css",
     "eslint": "node_modules/.bin/eslint --ignore-pattern coverage/**/*.js .",
