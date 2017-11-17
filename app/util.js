@@ -28,4 +28,16 @@ api.renderLayout = function(req, res, view, title, data) {
 };
 
 
+/**
+ * Returns a person's current age, defaulting to that of the author.
+ *
+ * @param   {number}    [birthYear] Birth year.
+ *
+ * @returns {number}                Age in years, rounded up.
+ */
+api.getAge = function(birthYear) {
+    return new Date().getFullYear() - (+birthYear || 1983);
+};
+
+
 module.exports = api;

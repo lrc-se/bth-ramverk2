@@ -15,7 +15,7 @@ var router = express.Router();
  * Index page.
  */
 router.get("/", function(req, res) {
-    util.renderLayout(req, res, "index", "Kalles sida");
+    util.renderLayout(req, res, "index", "Kalles sida", { age: util.getAge() });
 });
 
 
