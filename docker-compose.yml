@@ -35,27 +35,3 @@ services:
         ports:
             - "8103:8103"
         command: "npm start"
-
-    test1:
-        build:
-            context: .
-            dockerfile: .docker/Dockerfile-node
-        user: "node"
-        volumes:
-            - ./:/home/node/app/
-
-    test2:
-        build:
-            context: .
-            dockerfile: .docker/Dockerfile-node8
-        user: "node"
-        volumes:
-            - ./:/home/node/app/
-
-    test3:
-        build:
-            context: .
-            dockerfile: .docker/Dockerfile-node4
-        user: "node"
-        volumes:
-            - ./:/home/node/app/
