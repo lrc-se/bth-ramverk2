@@ -13,8 +13,8 @@
     "tap": "tap -c --reporter=spec --coverage --coverage-report=html --no-browser test/*.js",
     "tap-clover": "tap --reporter=tap --coverage --coverage-report=clover test/*.js",
     "htmlhint": "htmlhint --ignore node_modules/**,build/** | grep -v \"Config loaded:\"",
-    "stylelint": "stylelint --ignore-pattern build/**/*.css **/*.css",
-    "eslint": "eslint --ignore-pattern build/**/*.js .",
+    "stylelint": "stylelint **/*.css",
+    "eslint": "eslint .",
     "ejslint": "ejslint views/**/*.ejs",
     "lint": "npm-run-all -c htmlhint stylelint eslint ejslint"
   },
