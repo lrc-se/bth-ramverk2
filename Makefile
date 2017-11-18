@@ -53,9 +53,7 @@ SHELLCHECK := $(BIN)/shellcheck
 BATS       := $(BIN)/bats
 
 HTMLHINT  := $(NODEMODBIN)/htmlhint
-CSSLINT   := $(NODEMODBIN)/csslint
 STYLELINT := $(NODEMODBIN)/stylelint
-JSCS      := $(NODEMODBIN)/jscs
 ESLINT    := $(NODEMODBIN)/eslint
 EJSLINT   := $(NODEMODBIN)/ejslint
 JSONLINT  := $(NODEMODBIN)/jsonlint
@@ -63,10 +61,7 @@ JSYAML    := $(NODEMODBIN)/js-yaml
 HTMLMINI  := $(NODEMODBIN)/html-minifier
 CLEANCSS  := $(NODEMODBIN)/cleancss
 UGLIFYJS  := $(NODEMODBIN)/uglifyjs
-MOCHA     := $(NODEMODBIN)/mocha
 NYC       := $(NODEMODBIN)/nyc
-COVERALLS := $(NODEMODBIN)/coveralls
-CODECOV   := $(NODEMODBIN)/codecov
 
 
 
@@ -181,7 +176,7 @@ tag-prepare:
 .PHONY: setup-tools-js
 setup-tools-js:
 	@$(call HELPTEXT,$@)
-	npm install --save-dev htmlhint csslint stylelint jscs eslint eslint-plugin-react jsonlint js-yaml html-minifier clean-css-cli uglify-js mocha nyc coveralls codecov
+	npm install --save-dev htmlhint stylelint eslint eslint-plugin-react jsonlint js-yaml html-minifier clean-css-cli uglify-js nyc
 
 
 
@@ -200,19 +195,14 @@ check-tools-js:
 	@$(call CHECK_VERSION, node)
 	@$(call CHECK_VERSION, npm)
 	@$(call CHECK_VERSION, $(HTMLHINT))
-	@$(call CHECK_VERSION, $(CSSLINT))
 	@$(call CHECK_VERSION, $(STYLELINT))
-	@$(call CHECK_VERSION, $(JSCS))
 	@$(call CHECK_VERSION, $(ESLINT))
 	@$(call CHECK_VERSION, $(JSONLINT))
 	@$(call CHECK_VERSION, $(JSYAML))
 	@$(call CHECK_VERSION, $(HTMLMINI))
 	@$(call CHECK_VERSION, $(CLEANCSS))
 	@$(call CHECK_VERSION, $(UGLIFYJS), | cut -d ' ' -f 2)
-	@$(call CHECK_VERSION, $(MOCHA))
 	@$(call CHECK_VERSION, $(NYC))
-	@#@$(call CHECK_VERSION, $(COVERALLS))
-	@#@$(call CHECK_VERSION, $(CODECOV))
 
 
 
@@ -221,14 +211,6 @@ check-tools-js:
 htmlhint:
 	@$(call HELPTEXT,$@)
 	[ ! -f .htmlhintrc ] || $(HTMLHINT) --ignore build/**,node_modules/** | grep -v "Config loaded:"
-
-
-
-# target: csslint            - CSSlint.
-.PHONY: csslint
-csslint:
-	@$(call HELPTEXT,$@)
-	[ ! -f .csslintrc ] || $(CSSLINT) .
 
 
 
@@ -245,14 +227,6 @@ stylelint:
 stylelint-fix:
 	@$(call HELPTEXT,$@)
 	[ ! -f .stylelintrc.json ] || $(STYLELINT) **/*.css --fix
-
-
-
-# target: jscs               - JavaScript code style.
-.PHONY: jscs
-jscs:
-	@$(call HELPTEXT,$@)
-	[ ! -f .jscsrc ] || $(JSCS) .
 
 
 
