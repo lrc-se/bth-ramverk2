@@ -1,0 +1,27 @@
+<h1>Applikation</h1>
+<p>
+    Mitt val av klient/server-applikation är en JS-implementation av spelet <i>Skissa & Gissa</i>, där man ritar ord som de andra spelarna försöker gissa på. 
+    De som kommer ihåg Passagen från äldre tiders Internet kanske spelade en variant av det där – det gjorde i alla fall jag. 
+    Tanken är att få till en modern version av detta med de tekniker som faller inom ramarna för den här kursen.
+</p>
+<p>
+    Eftersom allt är preliminärt än så länge är också implementations&shy;detaljerna oklara i det här skedet, men ungefär så här går tankarna för tillfället:
+</p>
+<h4>Server</h4>
+<ul>
+    <li>Express</li>
+    <li>databas (troligen MongoDB) för spelare, poäng eller både och</li>
+    <li>REST-API för databasåtkomst</li>
+    <li><i>Web Sockets</i> med eget JSON-baserat protokoll.</li>
+</ul>
+<p>
+    <a href="https://github.com/lrc-se/bth-sg-server">Servern på GitHub</a>
+</p>
+<h4>Klient</h4>
+<ul>
+    <li>SPA-ramverk (kanske Vue?)</li>
+    <li><i>Canvas</i>-baserad ritning</li>
+    <li>chatt (även för gissningar)</li>
+    <li>AJAX för databasåtkomst</li>
+    <li><i>Web Sockets</i> för utväxling av grafik och meddelanden.</li>
+</ul>

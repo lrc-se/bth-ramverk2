@@ -35,4 +35,12 @@ router.get("/report", function(req, res) {
 });
 
 
+/**
+ * Application page.
+ */
+router.get("/app", function(req, res) {
+    util.renderLayout(req, res, "app", "Applikation");
+});
+
+
 module.exports = router;
