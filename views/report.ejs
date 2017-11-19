@@ -148,7 +148,118 @@
 </section>
 <section id="kmom03">
     <h2>Kmom03</h2>
-    <p>blubb</p>
+    <p>
+        Både redovisa-repot och applikationen använder <code>npm</code> istället för <code>make</code> fullt ut – den senare har inte ens någon makefil. 
+        I båda fallen kör kommandot <code>npm test</code> först validatorerna och därefter enhetstesten, så vill man endast köra de sistnämnda är det <code>npm run tap</code> 
+        som gäller istället (se vidare nedan). Jag har även passat på att städa en del i beroendena i och med att jag använder andra (och färre) verktyg än i standard&shy;utförandet av 
+        kursen/<wbr>uppgifterna; <i>node_modules</i> är <a href="https://pbs.twimg.com/media/C3SOI-_WAAAM4Js.jpg">omfattande nog</a> som den är, så det är bara bra om det går att kapa bort saker där.
+    </p>
+    <p>
+        Me-sidan har fått ett enkelt testfall bara för att se att det hela fungerar, men det känns mest konstlat och har inget egentligt värde då funktionen ifråga inte är att betrakta som allmän.
+    </p>
+    <h5>Berätta vilka tekniker/<wbr>verktyg du valde för enhetstest och kodtäckning och varför.</h5>
+    <p>
+        Som testverktyg valde jag <a href="http://www.node-tap.org/">Node Tap</a> för att det helt enkelt <em>kändes</em> bäst. 
+        Verktygets skapare uttrycker dessa känslor väl på sin startsida, så istället för att upprepa allt ordagrant här hänvisar jag helt enkelt dit och säger <strong>+1</strong>, 
+        men det här citatet är värt att lyfta fram:
+    </p>
+    <blockquote>JavaScript tests should be JavaScript programs; not English-language poems with weird punctuation.</blockquote>
+    <p>
+        Kodtäckningen sköts av <a href="https://www.npmjs.com/package/nyc">nyc</a> (Istanbul), som Node Tap inkluderar per standard, så det var bara att köra på. 
+        Denna kombination kan även enkelt generera en Clover-rapport som Scrutinizer kan tolka, 
+        så jag behövde inte dra in någon ytterligare tjänst utan kunde bara snickra ihop en passande konfigurations&shy;fil – och som vanligt gick allt igenom på första försöket.
+    </p>
+    <p>
+        Något annat som är positivt är att det trots att mycket annat sägs i diverse manualer går alldeles utmärkt att köra och testa ES6-kod utan vidare med dessa verktyg, 
+        så Babel göra sig icke besvär! En liten nackdel med Node Tap är att dokumentationen är rätt så sparsam, så det tog ett tag att klura ut hur jag skulle använda <code>beforeEach()</code>, 
+        men testfallen för applikationen (se nedan) blev enklare och renare när detta väl var på plats. Jag gjorde även en egen liten modul&shy;laddare för att kringgå <code>require</code>-cachen, 
+        så att man får en ny instans av modulen ifråga för varje deltest för att säkerställa isolation.
+    </p>
+    <h5>Berätta om din CI-kedja och reflektera över de val du gjorde.</h5>
+    <p>
+        Jag vet inte om det är så mycket att berätta, då den som sagt ser likadan ut som förut – och som i <b>ramverk1</b>. Det är bara konfigurations&shy;filerna som skiljer sig en del, 
+        men funktions&shy;mässigt är det likvärdigt – och allt fortsätter att förlöpa finfint, utan problem i vare sig automatik eller exekvering.
+    </p>
+    <h5>Reflektera över hur det gick att integrera enhetstesten i olika Docker&shy;behållare och om du ser någon nytta med detta.</h5>
+    <p>
+        Detta var lite knivigare än sist då både dokumentationen och instruktionerna lämnar en del att önska, så det blev mycket exempel&shy;studier och <i>trial and error</i>. 
+        I slutändan, efter många felsteg, gjorde jag så att varje behållare (jag har tre: senaste Node, Node 8 och Node 4) kör ett shellskript som först skriver ut Node&shy;versionen, 
+        så att man vet att den är rätt, och sedan kör <code>npm test</code>.
+    </p>
+    <p>
+        Rent tekniskt baseras mina behållare på <code>node:alpine</code> för att inte slösa så vansinnigt med diskutrymme och för att inte inkräkta på de tidigare behållarna som startar servern 
+        har jag lagt konfigurationen för Docker Compose i en egen fil (<i>docker-compose-test.yml</i>). Test&shy;behållarna startas med <code>npm run test1</code> o.s.v. 
+        Jag har även gjort ett medvetet val att <em>inte</em> köra <code>npm install</code> inne i behållaren, utan förlitar mig på att detta gjorts i huvud&shy;katalogen först – 
+        det känns bara dumt, slösaktigt och ineffektivt att duplicera detta monster hela <em>fyra</em> gånger i onödan. Det finns ju redan beroenden till huvud&shy;katalogen i form av källkoden, 
+        så en sådan redundans känns inte motiverad här.
+    </p>
+    <p>
+        Vad gäller användnings&shy;områden så inser jag nyttan av att kunna testa saker mot olika målmiljöer utan att behöva byta maskin, 
+        men i ett större perspektiv ser jag faror med att bygga hela sin utvecklings- och, ännu värre, produktions&shy;miljö kring Docker. 
+        Eftersom varje behållare är självständig och innehåller hela den stack den behöver blir det i slutändan ett oerhört ineffektivt utnyttjande av resurser – 
+        vem skulle medvetet välja att köra tio olika instanser av <em>samma</em> operativ&shy;system i något annat sammanhang om man inte behöver det? – och diskutrymmet försvinner i rasande takt. 
+        Någonstans måste man sansa sig också och inte se allt som spikar bara för att man hittat en hammare.
+    </p>
+    <h5>Hur väl lyckades du utvärdera TDD-konceptet och vilka är dina reflektioner?</h5>
+    <p>
+        Jag gjorde ett allvarligt försök att följa detta för ordliste&shy;modulen i applikationen (se nedan), men kunde förstås inte låta bli att <em>tänka</em> på hur koden skulle se ut i förväg. 
+        Det känns helt bakvänt att jobba på det sättet – vilket det också är – och jag trivs inte alls med det. Den utbredda evangelismen – den absoluta tron på att man har hittat 
+        <em>Den Sanna Vägen</em> och att alla andra synsätt är fundamentalt fel – bland metodens förespråkare verkar också frånstötande.
+    </p>
+    <p>
+        Det finns gott om kritiska TDD-artiklar på nätet och jag behöver inte upprepa alla invändningar här, men en fallgrop jag ser som extra tydlig och allvarlig är att man riskerar – 
+        eller kanske t.o.m. <em>garanterat kommer</em> – att få ett för smalt fokus och tappar greppet om helheten, vilket gör att system&shy;arkitekturen blir lidande. 
+        TDD uppmuntrar till att lösa ett problem (ett fallerande test) på enklast/<wbr>minsta möjliga sätt, vilket kanske fungerar i sammanhanget av den testade <em>enheten</em> 
+        men inte nödvändigtvis är lämpligt i sammanhanget av det större <em>systemet</em>, där det kan finnas andra parametrar att beakta.
+    </p>
+    <p>
+        Det blir även ett orimligt stort fokus på och beroende av testfallen, vilket kan leda till skör och ofullständig kod om man inte ser upp – 
+        bara för att koden passerar testen och har 100&nbsp;% kodtäckning betyder det inte nödvändigtvis att den faktiskt gör det den skall i produktion, med fysiska användare. 
+        Kort sagt, koden blir bara så bra som testfallen är och det är i de allra flesta fall <em>omöjligt</em> att täcka in <em>samtliga</em> 
+        kombinationer av tillstånd som ett system kan uppnå under körning, även om alla kodgrenar berörs.
+    </p>
+    <p>
+        Ett typexempel är PHP-funktionen <a href="http://php.net/manual/en/function.empty.php"><code>empty()</code></a>, 
+        som om den används för att kolla efter saknade indata kommer att stå för en obehaglig överraskning den dag någon skriver in strängen <code>"0"</code> – 
+        och har testfallen inte fångat detta under utvecklingen är koden fortfarande felaktig, oavsett vad test&shy;rapporterna visar.
+    </p>
+    <p>
+        Det finns också en tydlig risk i att skriva sina egna test, eftersom eventuella missar ifråga om specifikationerna och funktionaliteten då även kommer att hamna i systemet – 
+        testen och koden delar av nödvändighet samma svaghet i dessa fall och det faktum att testfallen passerar ger då en falsk säkerhet. 
+        Ur en rent praktisk synvinkel är det även knepigt att fullt ut upprätthålla mantrat att skriva testet först, eftersom detta ju måste ha något att testa, 
+        oavsett om det fallerar eller inte. Därmed måste man även i många fall skriva tillfällig kod för att över huvud taget kunna köra testsviten, 
+        så det blir en hel del fram-och-tillbaka ändå. 
+    </p>
+    <p>
+        Så, för att sammanfatta: Tack, men nej tack.
+    </p>
+    <h5>Berätta om tankarna kring din klient/server-applikation och nämn de tekniker du använder.</h5>
+    <p>
+        Det här var den del av momentet som var överlägset knepigast och tog längst tid – innan jag ens hade skrivit en enda kodrad. 
+        Jag har luftat svårigheterna i <a href="https://dbwebb.se/forum/viewtopic.php?f=60&amp;t=7005">forumet</a> och har efter responsen slutligen landat i någon form av plan.
+    </p>
+    <p>
+        Jag har tidigare, i en annan kurs på ett annat lärosäte, med en annan plattform och på ett annat sätt (skrivbords&shy;applikation i Java), utvecklat en variant av spelet <i>Skissa & Gissa</i>, 
+        som de något äldre (hrrm) bland oss kanske kommer ihåg från den gamla portalen Passagens storhetstid kring millennie&shy;skiftet – 
+        det var många håltimmar som gick åt till detta när det begav sig. Efter att ha tjuvkikat på Kmom04 och de realtids&shy;möjligheter som detta erbjuder 
+        (nån fördel skall man väl ha av att skjuta upp saker och ting) bestämde jag mig för att testa att implementera detta inom ramarna för denna kurs. 
+        Se även <a href="/app">applikations&shy;sidan</a>.
+    </p>
+    <p>
+        Efter att ha gått igenom koden för den gamla applikationen och filtrerat den genom ökad erfarenhet samt kunskap om de verktyg vi har att tillgå här ser jag betydande potential till 
+        både förbättring och färdighets&shy;mässig utveckling – JavaScripts inbyggda asynkronism förenklar mycket och <i>web sockets</i> tillsammans med JSON ser trevligt ut. 
+        Eftersom det av nödvändighet handlar om grafisk framställning ger upplägget också möjlighet att dyka ner i <code>&lt;canvas&gt;</code>-världen 
+        samt erbjuder ett betydligt bättre och mer <i>passande</i> tillfälle att testa ett ordentligt SPA-/<wbr>frontend&shy;ramverk än vad me-sidan gör.
+    </p>
+    <p>
+        Exakt hur jag gör är ännu öppet, då alla bitar inte är på plats ännu, men tanken är alltså att knåpa på så smått med understödjande tekniker under de ordinarie kurs&shy;momenten 
+        och sedan fortsätta bygga applikationen på allvar när vi går över i projektet – 
+        och det var just insikten om att detta är tillåtet som gjorde att jag kände att jag kunde ta steget och slå in på den här vägen. Vi får se hur långt det håller...
+    </p>
+    <p>
+        Applikationen är (eller kommer att bli) uppdelad i två repon – ett för klienten och ett för servern – där det sistnämnda just nu endast innehåller en enkel komponent som hanterar ordlistan, 
+        vilket var det bästa jag kunde komma på att bryta ut för att testa så här inledningsvis.
+    </p>
 </section>
 <section id="kmom04">
     <h2>Kmom04</h2>

@@ -69,6 +69,25 @@ pre {
     overflow-x: auto;
 }
 
+blockquote {
+    position: relative;
+    margin: 0 0 1em;
+    padding-left: 2em;
+    color: #333;
+    font-style: italic;
+}
+
+blockquote::before {
+    content: '"';
+    position: absolute;
+    left: .75rem;
+    top: -.75rem;
+    color: #ddd;
+    font-family: "Passion One", sans-serif;
+    font-size: 2em;
+    font-style: normal;
+}
+
 img {
     max-width: 100%;
     border: none;
@@ -235,6 +254,14 @@ footer a {
 @media only screen and (max-width: 639px) {
     html {
         font-size: 14px;
+    }
+    
+    blockquote {
+        padding-left: 1.5em;
+    }
+    
+    blockquote::before {
+        left: .5rem;
     }
     
     h1 {
