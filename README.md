@@ -37,7 +37,7 @@ __Run the server with different versions of Node using Docker:__
 
 `docker-compose up -d`
 
-The server starts on ports 8101 (Node 4), 8102 (Node 8) and 8103 (Node 9).
+The server starts on ports 8101 (Node 4), 8102 (Node 8) and 8103 (Node 9). Stop the containers with `docker-compose down`.
 
 
 Test

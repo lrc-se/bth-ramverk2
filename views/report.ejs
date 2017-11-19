@@ -160,7 +160,7 @@
     <h5>Berätta vilka tekniker/<wbr>verktyg du valde för enhetstest och kodtäckning och varför.</h5>
     <p>
         Som testverktyg valde jag <a href="http://www.node-tap.org/">Node Tap</a> för att det helt enkelt <em>kändes</em> bäst. 
-        Verktygets skapare uttrycker dessa känslor väl på sin startsida, så istället för att upprepa allt ordagrant här hänvisar jag helt enkelt dit och säger <strong>+1</strong>, 
+        Verktygets skapare uttrycker dessa känslor väl på dess startsida, så istället för att upprepa allt ordagrant här hänvisar jag helt enkelt dit och säger <strong>+1</strong>, 
         men det här citatet är värt att lyfta fram:
     </p>
     <blockquote>JavaScript tests should be JavaScript programs; not English-language poems with weird punctuation.</blockquote>
@@ -178,17 +178,19 @@
     <h5>Berätta om din CI-kedja och reflektera över de val du gjorde.</h5>
     <p>
         Jag vet inte om det är så mycket att berätta, då den som sagt ser likadan ut som förut – och som i <b>ramverk1</b>. Det är bara konfigurations&shy;filerna som skiljer sig en del, 
-        men funktions&shy;mässigt är det likvärdigt – och allt fortsätter att förlöpa finfint, utan problem i vare sig automatik eller exekvering.
+        men funktions&shy;mässigt är det likvärdigt – och allt fortsätter att förlöpa finfint, utan problem i vare sig automatik eller exekvering. 
+        Men för att upprepa använder jag alltså <a href="https://travis-ci.org/">Travis CI</a> som byggtjänst och <a href="http://scrutinizer-ci.com/">Scrutinizer</a> 
+        för kodkvalitet och kodtäckning, vilket synes mig fullt tillräckligt.
     </p>
     <h5>Reflektera över hur det gick att integrera enhetstesten i olika Docker&shy;behållare och om du ser någon nytta med detta.</h5>
     <p>
         Detta var lite knivigare än sist då både dokumentationen och instruktionerna lämnar en del att önska, så det blev mycket exempel&shy;studier och <i>trial and error</i>. 
         I slutändan, efter många felsteg, gjorde jag så att varje behållare (jag har tre: senaste Node, Node 8 och Node 4) kör ett shellskript som först skriver ut Node&shy;versionen, 
-        så att man vet att den är rätt, och sedan kör <code>npm test</code>.
+        så att man säkert vet vilken miljö man befinner sig i, och sedan kör <code>npm test</code>.
     </p>
     <p>
-        Rent tekniskt baseras mina behållare på <code>node:alpine</code> för att inte slösa så vansinnigt med diskutrymme och för att inte inkräkta på de tidigare behållarna som startar servern 
-        har jag lagt konfigurationen för Docker Compose i en egen fil (<i>docker-compose-test.yml</i>). Test&shy;behållarna startas med <code>npm run test1</code> o.s.v. 
+        Rent tekniskt baseras mina behållare på <code>node:alpine</code> för att inte slösa så vansinnigt med diskutrymme och jag har lagt konfigurationen för Docker Compose i en egen fil 
+        (<i>docker-compose-test.yml</i>) för att inte inkräkta på de tidigare behållarna som startar servern. Test&shy;behållarna startas med <code>npm run test1</code> o.s.v. 
         Jag har även gjort ett medvetet val att <em>inte</em> köra <code>npm install</code> inne i behållaren, utan förlitar mig på att detta gjorts i huvud&shy;katalogen först – 
         det känns bara dumt, slösaktigt och ineffektivt att duplicera detta monster hela <em>fyra</em> gånger i onödan. Det finns ju redan beroenden till huvud&shy;katalogen i form av källkoden, 
         så en sådan redundans känns inte motiverad här.
@@ -196,9 +198,9 @@
     <p>
         Vad gäller användnings&shy;områden så inser jag nyttan av att kunna testa saker mot olika målmiljöer utan att behöva byta maskin, 
         men i ett större perspektiv ser jag faror med att bygga hela sin utvecklings- och, ännu värre, produktions&shy;miljö kring Docker. 
-        Eftersom varje behållare är självständig och innehåller hela den stack den behöver blir det i slutändan ett oerhört ineffektivt utnyttjande av resurser – 
-        vem skulle medvetet välja att köra tio olika instanser av <em>samma</em> operativ&shy;system i något annat sammanhang om man inte behöver det? – och diskutrymmet försvinner i rasande takt. 
-        Någonstans måste man sansa sig också och inte se allt som spikar bara för att man hittat en hammare.
+        Eftersom varje behållare är självständig och innehåller <em>hela</em> den stack den behöver blir det i slutändan ett oerhört ineffektivt utnyttjande av resurser – 
+        vem skulle medvetet välja att köra tiotals olika instanser av <em>samma</em> operativ&shy;system, inklusive allt, i något annat sammanhang om man inte behöver det? – 
+        och diskutrymmet försvinner i rasande takt. Någonstans måste man sansa sig också och inte se allt som spikar bara för att man hittat en hammare.
     </p>
     <h5>Hur väl lyckades du utvärdera TDD-konceptet och vilka är dina reflektioner?</h5>
     <p>
@@ -207,25 +209,26 @@
         <em>Den Sanna Vägen</em> och att alla andra synsätt är fundamentalt fel – bland metodens förespråkare verkar också frånstötande.
     </p>
     <p>
-        Det finns gott om kritiska TDD-artiklar på nätet och jag behöver inte upprepa alla invändningar här, men en fallgrop jag ser som extra tydlig och allvarlig är att man riskerar – 
-        eller kanske t.o.m. <em>garanterat kommer</em> – att få ett för smalt fokus och tappar greppet om helheten, vilket gör att system&shy;arkitekturen blir lidande. 
-        TDD uppmuntrar till att lösa ett problem (ett fallerande test) på enklast/<wbr>minsta möjliga sätt, vilket kanske fungerar i sammanhanget av den testade <em>enheten</em> 
-        men inte nödvändigtvis är lämpligt i sammanhanget av det större <em>systemet</em>, där det kan finnas andra parametrar att beakta.
+        Det finns gott om kritiska TDD-artiklar på nätet, många baserade på konkreta erfarenheter, och jag behöver inte upprepa alla invändningar här, 
+        men en fallgrop jag ser som extra tydlig och allvarlig är att man riskerar – eller kanske t.o.m. <em>garanterat kommer</em> – att få ett för smalt fokus och tappar greppet om helheten, 
+        vilket gör att system&shy;arkitekturen på högre nivå blir lidande. TDD uppmuntrar till att lösa ett problem (ett fallerande test) på enklast/<wbr>minsta möjliga sätt, 
+        vilket kanske fungerar i sammanhanget av den testade <em>enheten</em> men inte nödvändigtvis är lämpligt i sammanhanget av det större <em>systemet</em>, 
+        där det kan finnas andra parametrar att beakta – särskilt om man underlåter (eller helt enkelt glömmer) att refaktorisera och städa upp efter de inledande stegen.
     </p>
     <p>
         Det blir även ett orimligt stort fokus på och beroende av testfallen, vilket kan leda till skör och ofullständig kod om man inte ser upp – 
-        bara för att koden passerar testen och har 100&nbsp;% kodtäckning betyder det inte nödvändigtvis att den faktiskt gör det den skall i produktion, med fysiska användare. 
+        bara för att koden passerar testen och kod&shy;täckningen ligger på 100&nbsp;% betyder det inte nödvändigtvis att den faktiskt gör det den skall i produktion, med fysiska användare. 
         Kort sagt, koden blir bara så bra som testfallen är och det är i de allra flesta fall <em>omöjligt</em> att täcka in <em>samtliga</em> 
         kombinationer av tillstånd som ett system kan uppnå under körning, även om alla kodgrenar berörs.
     </p>
     <p>
         Ett typexempel är PHP-funktionen <a href="http://php.net/manual/en/function.empty.php"><code>empty()</code></a>, 
         som om den används för att kolla efter saknade indata kommer att stå för en obehaglig överraskning den dag någon skriver in strängen <code>"0"</code> – 
-        och har testfallen inte fångat detta under utvecklingen är koden fortfarande felaktig, oavsett vad test&shy;rapporterna visar.
+        och har testfallen inte fångat detta under utvecklingen är koden fortfarande felaktig i grunden, oavsett vad test&shy;rapporterna visar.
     </p>
     <p>
-        Det finns också en tydlig risk i att skriva sina egna test, eftersom eventuella missar ifråga om specifikationerna och funktionaliteten då även kommer att hamna i systemet – 
-        testen och koden delar av nödvändighet samma svaghet i dessa fall och det faktum att testfallen passerar ger då en falsk säkerhet. 
+        Det finns också en tydlig risk i att skriva sina egna test, eftersom eventuella missar och förbiseenden ifråga om specifika&shy;tionerna och funktionali&shy;teten 
+        då även kommer att hamna i systemet – testen och koden delar av nödvändighet samma svaghet i dessa fall och det faktum att testfallen passerar ger då en falsk säkerhet. 
         Ur en rent praktisk synvinkel är det även knepigt att fullt ut upprätthålla mantrat att skriva testet först, eftersom detta ju måste ha något att testa, 
         oavsett om det fallerar eller inte. Därmed måste man även i många fall skriva tillfällig kod för att över huvud taget kunna köra testsviten, 
         så det blir en hel del fram-och-tillbaka ändå. 
@@ -242,18 +245,18 @@
         Jag har tidigare, i en annan kurs på ett annat lärosäte, med en annan plattform och på ett annat sätt (skrivbords&shy;applikation i Java), utvecklat en variant av spelet <i>Skissa & Gissa</i>, 
         som de något äldre (hrrm) bland oss kanske kommer ihåg från den gamla portalen Passagens storhetstid kring millennie&shy;skiftet – 
         det var många håltimmar som gick åt till detta när det begav sig. Efter att ha tjuvkikat på Kmom04 och de realtids&shy;möjligheter som detta erbjuder 
-        (nån fördel skall man väl ha av att skjuta upp saker och ting) bestämde jag mig för att testa att implementera detta inom ramarna för denna kurs. 
+        (nån fördel skall man väl ha av att skjuta upp saker och ting) bestämde jag mig för att försöka åter&shy;implementera detta inom ramarna för denna kurs. 
         Se även <a href="/app">applikations&shy;sidan</a>.
     </p>
     <p>
         Efter att ha gått igenom koden för den gamla applikationen och filtrerat den genom ökad erfarenhet samt kunskap om de verktyg vi har att tillgå här ser jag betydande potential till 
-        både förbättring och färdighets&shy;mässig utveckling – JavaScripts inbyggda asynkronism förenklar mycket och <i>web sockets</i> tillsammans med JSON ser trevligt ut. 
+        både förbättring och färdighets&shy;mässig utveckling – JavaScripts inbyggda asynkronism förenklar mycket och <i>Web Sockets</i> tillsammans med JSON ser trevligt ut. 
         Eftersom det av nödvändighet handlar om grafisk framställning ger upplägget också möjlighet att dyka ner i <code>&lt;canvas&gt;</code>-världen 
         samt erbjuder ett betydligt bättre och mer <i>passande</i> tillfälle att testa ett ordentligt SPA-/<wbr>frontend&shy;ramverk än vad me-sidan gör.
     </p>
     <p>
-        Exakt hur jag gör är ännu öppet, då alla bitar inte är på plats ännu, men tanken är alltså att knåpa på så smått med understödjande tekniker under de ordinarie kurs&shy;momenten 
-        och sedan fortsätta bygga applikationen på allvar när vi går över i projektet – 
+        Exakt hur jag gör är ännu öppet, då alla bitar inte är på plats ännu, men tanken är alltså att knåpa på så smått med under&shy;stödjande tekniker under de ordinarie kurs&shy;momenten 
+        och sedan övergå till att bygga själva applikationen på allvar när vi går in i projektet – 
         och det var just insikten om att detta är tillåtet som gjorde att jag kände att jag kunde ta steget och slå in på den här vägen. Vi får se hur långt det håller...
     </p>
     <p>
