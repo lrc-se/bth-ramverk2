@@ -35,7 +35,7 @@ app.use(function(err, req, res, next) {
     let title;
     switch (err.status) {
         case 403:
-            title = "Behörighet saknas";
+            title = "BehÃ¶righet saknas";
             break;
         case 404:
             title = "Kunde inte hitta sidan";
@@ -44,7 +44,7 @@ app.use(function(err, req, res, next) {
             title = "Serverfel";
             break;
         default:
-            title = "Något gick fel";
+            title = "NÃ¥got gick fel";
     }
     
     res.status(err.status || 500);
