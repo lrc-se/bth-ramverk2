@@ -25,6 +25,7 @@ function handleConnection(socket, req) {
     // message handler
     socket.on("message", function(data) {
         console.log(`Received message (${ip}):`, data);
+        broadcast(data, socket);
     });
     
     // error handler
@@ -39,6 +40,22 @@ function handleConnection(socket, req) {
 }
 
 
+/**
+ * Broadcasts a message to all connected clients.
+ *
+ * @param   {object}    data        Message to send.
+ * @param   {WebSocket} [socket]    Web socket instance to exclude from broadcast (if any).
+ */
+function broadcast(data, socket) {
+    server.clients.forEach(function(client) {
+        if (socket === client || client.readyState !== ws.OPEN) {
+            return;
+        }
+        client.send(data);
+    });
+}
+
+
 const ChatServer = {
     /**
      * Initializes the server.
@@ -46,7 +63,10 @@ const ChatServer = {
      * @param   {http.Server}   httpServer  HTTP server instance.
      */
     init: function(httpServer) {
-        server = new ws.Server({ server: httpServer });
+        server = new ws.Server({
+            server: httpServer,
+            clientTracking: true
+        });
         server.on("connection", handleConnection);
     }
 };
