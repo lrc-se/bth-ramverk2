@@ -10,7 +10,7 @@ const ws = require("ws");
 
 
 var server;
-var nicks = new Set();
+var clients = {};
 
 
 /**
@@ -37,16 +37,16 @@ function handleConnection(socket, req) {
         switch (data.cmd) {
             case "nick":
                 let nick = data.data;
-                if (nicks.has(nick)) {
+                if (clients[nick]) {
                     sendCmd(socket, "unwelcome", null);
                     socket.close();
                     return;
                 }
                 
                 socket.nick = nick;
-                nicks.add(nick);
+                clients[nick] = socket;
                 sendCmd(socket, "welcome", null);
-                broadcastCmd("users", Array.from(nicks));
+                broadcastCmd("users", Object.keys(clients));
                 broadcastMessage(`${nick} har anslutit sig`);
                 break;
             case "msg":
@@ -63,9 +63,9 @@ function handleConnection(socket, req) {
     // disconnection handler
     socket.on("close", function(code, reason) {
         console.log(`Client disconnected (${ip}):`, code, reason);
-        if (nicks.has(socket.nick)) {
-            nicks.delete(socket.nick);
-            broadcastCmd("users", Array.from(nicks));
+        if (clients[socket.nick]) {
+            delete clients[socket.nick];
+            broadcastCmd("users", Object.keys(clients));
             broadcastMessage(`${socket.nick} har lämnat chatten`);
         }
     });
