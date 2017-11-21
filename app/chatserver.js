@@ -10,6 +10,7 @@ const ws = require("ws");
 
 
 var server;
+var nicks = new Set();
 
 
 /**
@@ -25,7 +26,32 @@ function handleConnection(socket, req) {
     // message handler
     socket.on("message", function(data) {
         console.log(`Received message (${ip}):`, data);
-        broadcast(data, socket);
+        
+        try {
+            data = JSON.parse(data);
+        } catch (ex) {
+            console.error("Illegal message format");
+            return;
+        }
+        
+        switch (data.cmd) {
+            case "nick":
+                let nick = data.data;
+                if (nicks.has(nick)) {
+                    sendCmd(socket, "unwelcome", null);
+                    socket.close();
+                    return;
+                }
+                
+                socket.nick = nick;
+                nicks.add(nick);
+                sendCmd(socket, "welcome", null);
+                broadcastMessage(`${nick} har anslutit sig`);
+                break;
+            case "msg":
+                broadcastMessage(data.data, socket);
+                break;
+        }
     });
     
     // error handler
@@ -36,6 +62,10 @@ function handleConnection(socket, req) {
     // disconnection handler
     socket.on("close", function(code, reason) {
         console.log(`Client disconnected (${ip}):`, code, reason);
+        if (nicks.has(socket.nick)) {
+            nicks.delete(socket.nick);
+            broadcastMessage(`${socket.nick} har lämnat chatten`);
+        }
     });
 }
 
@@ -53,6 +83,29 @@ function broadcast(data, socket) {
         }
         client.send(data);
     });
+}
+
+
+function broadcastMessage(msg, socket) {
+    let data = {
+        time: new Date(),
+        msg: msg
+    };
+    if (socket) {
+        data.user = socket.nick;
+    }
+    broadcast(JSON.stringify({
+        cmd: "msg",
+        data: data
+    }), socket);
+}
+
+
+function sendCmd(socket, cmd, data) {
+    socket.send(JSON.stringify({
+        cmd: cmd,
+        data: data
+    }));
 }
 
 

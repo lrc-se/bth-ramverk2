@@ -4,13 +4,14 @@
     var nickForm = doc.getElementById("nick-form");
     var chatForm = doc.getElementById("chat-form");
     var chatRoll = doc.getElementById("chat-roll");
+    var nick;
     var ws;
     
     
     function connect(e) {
         e.preventDefault();
         
-        var nick = nickForm.nick.value;
+        nick = nickForm.nick.value;
         if (!nick) {
             alert("Du måste ange ett smeknamn.");
             return;
@@ -30,16 +31,40 @@
         }
         
         ws.onopen = function() {
-            doc.getElementById("chat-container").style.display = "block";
-            nickForm.nick.disabled = true;
-            nickForm.url.disabled = true;
-            nickForm.connect.disabled = true;
-            nickForm.disconnect.disabled = false;
+            sendCmd("nick", nick);
         };
         ws.onmessage = function(e) {
-            addMessage(e.data);
+            var data;
+            try {
+                data = JSON.parse(e.data);
+            } catch (ex) {
+                console.error("Illegal message format:", e.data);
+                return;
+            }
+            
+            switch (data.cmd) {
+                case "welcome":
+                    doc.getElementById("chat-container").style.display = "block";
+                    nickForm.nick.disabled = true;
+                    nickForm.url.disabled = true;
+                    nickForm.connect.disabled = true;
+                    nickForm.disconnect.disabled = false;
+                    break;
+                case "unwelcome":
+                    alert("Smeknamnet är upptaget.");
+                    break;
+                case "msg":
+                    addMessage(data.data);
+                    break;
+                default:
+                    console.error("Unknown message:", data);
+            }
         };
-        ws.onclose = function() {
+        ws.onclose = function(e) {
+            if (e.code !== 1000) {
+                alert("Anslutningen stängdes ner. Meddelande:\n\n" + e.reason);
+            }
+            
             doc.getElementById("chat-container").style.display = "none";
             nickForm.nick.disabled = false;
             nickForm.url.disabled = false;
@@ -50,10 +75,22 @@
         };
     }
     
-    function addMessage(msg) {
+    function sendCmd(cmd, data) {
+        ws.send(JSON.stringify({
+            cmd: cmd,
+            data: data
+        }));
+    }
+    
+    function addMessage(data) {
+        var timestamp = "[" + data.time.substring(11, 19) + "] ";
         var div = doc.createElement("div");
         div.className = "chat-msg";
-        div.textContent = msg;
+        if (data.user) {
+            div.textContent = timestamp + "<" + data.user + "> " + data.msg;
+        } else {
+            div.innerHTML = timestamp + "<strong>* " + data.msg + "</strong>";
+        }
         chatRoll.appendChild(div);
     }
         
@@ -70,9 +107,14 @@
             return;
         }
         
-        addMessage(msg);
-        ws.send(msg);
+        addMessage({
+            time: JSON.parse(JSON.stringify(new Date())),
+            user: nick,
+            msg: msg
+        });
+        sendCmd("msg", msg);
         chatForm.msg.value = "";
+        chatForm.msg.focus();
     }
     
     
