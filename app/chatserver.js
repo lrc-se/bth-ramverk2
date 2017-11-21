@@ -35,7 +35,7 @@ function handleConnection(socket, req) {
         }
         
         switch (data.cmd) {
-            case "nick":
+            case "nick": {
                 let nick = data.data;
                 if (clients[nick]) {
                     sendCmd(socket, "unwelcome", null);
@@ -49,6 +49,7 @@ function handleConnection(socket, req) {
                 broadcastCmd("users", Object.keys(clients));
                 broadcastMessage(`${nick} har anslutit sig`);
                 break;
+            }
             case "msg":
                 broadcastMessage(data.data, socket);
                 break;
