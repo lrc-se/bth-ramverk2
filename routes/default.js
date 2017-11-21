@@ -43,4 +43,12 @@ router.get("/app", function(req, res) {
 });
 
 
+/**
+ * Chat page.
+ */
+router.get("/chat", function(req, res) {
+    util.renderLayout(req, res, "chat", "Chatt");
+});
+
+
 module.exports = router;
