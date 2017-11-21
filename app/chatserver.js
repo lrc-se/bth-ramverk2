@@ -72,6 +72,11 @@ function handleConnection(socket, req) {
 }
 
 
+function handleProtocols(protocols) {
+    return (~protocols.indexOf("v1") ? "v1" : false);
+}
+
+
 /**
  * Broadcasts a message to all connected clients.
  *
@@ -124,7 +129,8 @@ const ChatServer = {
     init: function(httpServer) {
         server = new ws.Server({
             server: httpServer,
-            clientTracking: true
+            clientTracking: true,
+            handleProtocols: handleProtocols
         });
         server.on("connection", handleConnection);
     }

@@ -25,7 +25,7 @@
         }
         
         try {
-            ws = new WebSocket(url);
+            ws = new WebSocket(url, "v1");
         } catch (ex) {
             alert("Kunde inte öppna anslutningen. Felmeddelande:\n\n" + ex.message);
             return;
