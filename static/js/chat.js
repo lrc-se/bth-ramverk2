@@ -4,6 +4,7 @@
     var nickForm = doc.getElementById("nick-form");
     var chatForm = doc.getElementById("chat-form");
     var chatRoll = doc.getElementById("chat-roll");
+    var chatList = doc.getElementById("chat-list");
     var nick;
     var ws;
     
@@ -56,6 +57,9 @@
                 case "msg":
                     addMessage(data.data);
                     break;
+                case "users":
+                    showUsers(data.data);
+                    break;
                 default:
                     console.error("Unknown message:", data);
             }
@@ -92,6 +96,18 @@
             div.innerHTML = timestamp + "<strong>* " + data.msg + "</strong>";
         }
         chatRoll.appendChild(div);
+    }
+    
+    function showUsers(users) {
+        users.sort();
+        var frag = doc.createDocumentFragment();
+        users.forEach(function(user) {
+            var div = doc.createElement("div");
+            div.textContent = user;
+            frag.appendChild(div);
+        });
+        chatList.innerHTML = "";
+        chatList.appendChild(frag);
     }
         
     function sendMessage(e) {

@@ -46,6 +46,7 @@ function handleConnection(socket, req) {
                 socket.nick = nick;
                 nicks.add(nick);
                 sendCmd(socket, "welcome", null);
+                broadcastCmd("users", Array.from(nicks));
                 broadcastMessage(`${nick} har anslutit sig`);
                 break;
             case "msg":
@@ -64,6 +65,7 @@ function handleConnection(socket, req) {
         console.log(`Client disconnected (${ip}):`, code, reason);
         if (nicks.has(socket.nick)) {
             nicks.delete(socket.nick);
+            broadcastCmd("users", Array.from(nicks));
             broadcastMessage(`${socket.nick} har lämnat chatten`);
         }
     });
@@ -94,10 +96,7 @@ function broadcastMessage(msg, socket) {
     if (socket) {
         data.user = socket.nick;
     }
-    broadcast(JSON.stringify({
-        cmd: "msg",
-        data: data
-    }), socket);
+    broadcastCmd("msg", data, socket);
 }
 
 
@@ -106,6 +105,13 @@ function sendCmd(socket, cmd, data) {
         cmd: cmd,
         data: data
     }));
+}
+
+function broadcastCmd(cmd, data, socket) {
+    broadcast(JSON.stringify({
+        cmd: cmd,
+        data: data
+    }), socket);
 }
 
 
