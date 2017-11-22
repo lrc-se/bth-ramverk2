@@ -6,71 +6,11 @@
 
 "use strict";
 
-const ws = require("ws");
+const wsServer = require("./ws-server");
 
 
 var server;
 var clients = {};
-
-
-/**
- * Handles an incoming connection.
- *
- * @param   {WebSocket}             socket  Web socket instance.
- * @param   {http.IncomingMessage}  req     Request object.
- */
-function handleConnection(socket, req) {
-    let ip = req.connection.remoteAddress;
-    console.log(`Client connected (${ip})`);
-    
-    // message handler
-    socket.on("message", function(data) {
-        console.log(`Received message (${ip}):`, data);
-        
-        try {
-            data = JSON.parse(data);
-        } catch (ex) {
-            console.error("Illegal message format");
-            return;
-        }
-        
-        switch (data.cmd) {
-            case "nick": {
-                let nick = data.data;
-                if (clients[nick]) {
-                    sendCmd(socket, "unwelcome", null);
-                    socket.close();
-                    return;
-                }
-                
-                socket.nick = nick;
-                clients[nick] = socket;
-                sendCmd(socket, "welcome", null);
-                broadcastCmd("users", Object.keys(clients));
-                broadcastMessage(`${nick} har anslutit sig`);
-                break;
-            }
-            case "msg":
-                broadcastMessage(data.data, socket);
-                break;
-        }
-    });
-    
-    // error handler
-    socket.on("error", function(err) {
-        console.error(`Socket error (${ip}):`, err);
-    });
-    
-    // disconnection handler
-    socket.on("close", function(code, reason) {
-        console.log(`Client disconnected (${ip}):`, code, reason);
-        if (clients[socket.nick]) {
-            delete clients[socket.nick];
-            broadcastCmd("users", Object.keys(clients));
-            broadcastMessage(`${socket.nick} har lämnat chatten`);
-        }
-    });
-}
 
 
 function handleProtocols(protocols) {
@@ -78,19 +18,59 @@ function handleProtocols(protocols) {
 }
 
 
-/**
- * Broadcasts a message to all connected clients.
- *
- * @param   {object}    data        Message to send.
- * @param   {WebSocket} [socket]    Web socket instance to exclude from broadcast (if any).
- */
-function broadcast(data, socket) {
-    server.clients.forEach(function(client) {
-        if (socket === client || client.readyState !== ws.OPEN) {
-            return;
+function handleConnection(client) {
+    console.log(`Client connected (${client.request.connection.remoteAddress})`);
+}
+
+
+function handleMessage(data, client) {
+    console.log(`Received message (${client.request.connection.remoteAddress}):`, data);
+    
+    try {
+        data = JSON.parse(data);
+    } catch (ex) {
+        console.error("Illegal message format");
+        return;
+    }
+    
+    let socket = client.socket;
+    switch (data.cmd) {
+        case "nick": {
+            let nick = data.data;
+            if (clients[nick]) {
+                sendCmd(socket, "unwelcome", null);
+                socket.close();
+                return;
+            }
+            
+            socket.nick = nick;
+            clients[nick] = socket;
+            sendCmd(socket, "welcome", null);
+            broadcastCmd("users", Object.keys(clients));
+            broadcastMessage(`${nick} har anslutit sig`);
+            break;
         }
-        client.send(data);
-    });
+        case "msg":
+            broadcastMessage(data.data, socket);
+            break;
+    }
+}
+
+
+function handleError(err, client) {
+    console.error(`Socket error (${client.request.connection.remoteAddress}):`, err);
+}
+
+
+function handleDisconnection(code, reason, client) {
+    console.log(`Client disconnected (${client.request.connection.remoteAddress}):`, code, reason);
+    
+    let nick = client.socket.nick;
+    if (clients[nick]) {
+        delete clients[nick];
+        broadcastCmd("users", Object.keys(clients));
+        broadcastMessage(`${nick} har lämnat chatten`);
+    }
 }
 
 
@@ -107,17 +87,17 @@ function broadcastMessage(msg, socket) {
 
 
 function sendCmd(socket, cmd, data) {
-    socket.send(JSON.stringify({
+    server.sendJSON(socket, {
         cmd: cmd,
         data: data
-    }));
+    });
 }
 
 function broadcastCmd(cmd, data, socket) {
-    broadcast(JSON.stringify({
+    server.broadcastJSON({
         cmd: cmd,
         data: data
-    }), socket);
+    }, socket);
 }
 
 
@@ -128,12 +108,14 @@ const ChatServer = {
      * @param   {http.Server}   httpServer  HTTP server instance.
      */
     init: function(httpServer) {
-        server = new ws.Server({
+        server = wsServer({
             server: httpServer,
-            clientTracking: true,
-            handleProtocols: handleProtocols
+            protocolHandler: handleProtocols,
+            connectionHandler: handleConnection,
+            messageHandler: handleMessage,
+            errorHandler: handleError,
+            closeHandler: handleDisconnection
         });
-        server.on("connection", handleConnection);
     }
 };
 
