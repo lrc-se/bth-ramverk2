@@ -25,11 +25,11 @@ const wsServerProto = {
      * Broadcasts a message to all connected clients.
      *
      * @param   {string}    data        Message to send.
-     * @param   {WebSocket} [socket]    Web socket instance to exclude from broadcast (if any).
+     * @param   {WebSocket} [exclude]   Web socket instance to exclude from broadcast (if any).
      */
-    broadcast: function broadcast(data, socket) {
+    broadcast: function broadcast(data, exclude) {
         this.server.clients.forEach(function(client) {
-            if (socket === client || client.readyState !== ws.OPEN) {
+            if (exclude === client || client.readyState !== ws.OPEN) {
                 return;
             }
             client.send(data);
@@ -52,10 +52,10 @@ const wsServerProto = {
      * Broadcasts a JSON object to all connected clients.
      *
      * @param   {object}    data        Object to send.
-     * @param   {WebSocket} [socket]    Web socket instance to exclude from broadcast (if any).
+     * @param   {WebSocket} [exclude]   Web socket instance to exclude from broadcast (if any).
      */
-    broadcastJSON: function broadcastJSON(data, socket) {
-        this.broadcast(JSON.stringify(data), socket);
+    broadcastJSON: function broadcastJSON(data, exclude) {
+        this.broadcast(JSON.stringify(data), exclude);
     }
 };
 
