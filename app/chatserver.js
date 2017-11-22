@@ -47,11 +47,12 @@ function handleMessage(data, client) {
             clients[nick] = socket;
             sendCmd(socket, "welcome", null);
             broadcastCmd("users", Object.keys(clients));
-            broadcastMessage(`${nick} har anslutit sig`);
+            broadcastMessage(`${nick} har anslutit sig`, null, socket);
+            sendMessage(socket, "Välkommen till chatten!");
             break;
         }
         case "msg":
-            broadcastMessage(data.data, socket);
+            broadcastMessage(data.data, socket, socket);
             break;
     }
 }
@@ -74,30 +75,41 @@ function handleDisconnection(code, reason, client) {
 }
 
 
-function broadcastMessage(msg, socket) {
+function buildMessage(msg, from) {
     let data = {
         time: new Date(),
         msg: msg
     };
-    if (socket) {
-        data.user = socket.nick;
+    if (from) {
+        data.user = from.nick;
     }
-    broadcastCmd("msg", data, socket);
+    return data;
 }
 
 
-function sendCmd(socket, cmd, data) {
-    server.sendJSON(socket, {
+function sendMessage(to, msg, from) {
+    sendCmd(to, "msg", buildMessage(msg, from));
+}
+
+
+function broadcastMessage(msg, from, exclude) {
+    broadcastCmd("msg", buildMessage(msg, from), exclude);
+}
+
+
+function sendCmd(to, cmd, data) {
+    server.sendJSON(to, {
         cmd: cmd,
         data: data
     });
 }
 
-function broadcastCmd(cmd, data, socket) {
+
+function broadcastCmd(cmd, data, exclude) {
     server.broadcastJSON({
         cmd: cmd,
         data: data
-    }, socket);
+    }, exclude);
 }
 
 
