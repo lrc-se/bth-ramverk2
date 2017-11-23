@@ -65,6 +65,7 @@ const wsServerProto = {
  *
  * @param   {object}        config                      Configuration object:
  * @param   {http.Server}   config.server                 HTTP server instance.
+ * @param   {number}        [config.timeout]              Ping timeout in milliseconds.
  * @param   {function}      [config.protocolHandler]      Protocol selection handler.
  * @param   {function}      [config.connectionHandler]    Connection handler.
  * @param   {function}      [config.messageHandler]       Message reception handler.
@@ -80,11 +81,20 @@ function createServer(config) {
         wsConfig.handleProtocols = config.protocolHandler;
     }
     
+    // set up Web Sockets server
     let server = new ws.Server(wsConfig);
     server.on("connection", function(socket, req) {
         handleConnection(socket, req, config);
     });
     
+    // start ping cycle, if requested
+    if (config.timeout) {
+        setInterval(function() {
+            server.clients.forEach(ping);
+        }, config.timeout);
+    }
+    
+    // create and return instance
     let wsServer = Object.create(wsServerProto);
     wsServer.server = server;
     return wsServer;
@@ -129,6 +139,32 @@ function handleConnection(socket, req, config) {
             config.closeHandler(code, reason, client);
         });
     }
+    
+    // set up ping cycle, if requested
+    if (config.timeout) {
+        socket.pingPending = false;
+        socket.on("pong", function() {
+            socket.pingPending = false;
+        });
+    }
+}
+
+
+/**
+ * Pings a connected client, disconnecting it in case of no response from last ping.
+ *
+ * @param   {WebSocket}     socket  Web socket instance.
+ */
+function ping(socket) {
+    // forcibly close connection if no reply since last ping
+    if (socket.pingPending) {
+        socket.terminate();
+        return;
+    }
+    
+    // send next ping
+    socket.pingPending = true;
+    socket.ping("", false, true);
 }
 
 
