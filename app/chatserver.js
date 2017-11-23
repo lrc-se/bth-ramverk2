@@ -64,13 +64,22 @@ function handleError(err, client) {
 
 
 function handleDisconnection(code, reason, client) {
-    console.log(`Client disconnected (${client.request.connection.remoteAddress}):`, code, reason);
+    let ip = client.request.connection.remoteAddress;
+    if (!client.socket.pingPending) {
+        console.log(`Client disconnected (${ip}):`, code, reason);
+    } else {
+        console.log(`Ping timeout (${ip})`);
+    }
     
     let nick = client.socket.nick;
     if (clients[nick]) {
         delete clients[nick];
         broadcastCmd("users", Object.keys(clients));
-        broadcastMessage(`${nick} har lämnat chatten`);
+        if (!client.socket.pingPending) {
+            broadcastMessage(`${nick} har lämnat chatten`);
+        } else {
+            broadcastMessage(`${nick} har kopplats från p.g.a. ping-timeout`);
+        }
     }
 }
 
@@ -122,6 +131,7 @@ const ChatServer = {
     init: function(httpServer) {
         server = wsServer({
             server: httpServer,
+            timeout: 30000,
             protocolHandler: handleProtocols,
             connectionHandler: handleConnection,
             messageHandler: handleMessage,
