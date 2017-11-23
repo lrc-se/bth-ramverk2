@@ -1,4 +1,4 @@
-(function(doc) {
+(function(win, doc) {
     "use strict";
     
     var nickForm = doc.getElementById("nick-form");
@@ -45,11 +45,13 @@
             
             switch (data.cmd) {
                 case "welcome":
-                    doc.getElementById("chat-container").style.display = "block";
+                    doc.getElementById("chat-container").style.display = "flex";
                     nickForm.nick.disabled = true;
                     nickForm.url.disabled = true;
                     nickForm.connect.disabled = true;
                     nickForm.disconnect.disabled = false;
+                    win.scrollTo(0, chatForm.offsetTop);
+                    chatForm.msg.focus();
                     break;
                 case "unwelcome":
                     alert("Smeknamnet är upptaget.");
@@ -87,19 +89,28 @@
     }
     
     function addMessage(data) {
-        var timestamp = "[" + data.time.substring(11, 19) + "] ";
         var div = doc.createElement("div");
-        div.className = "chat-msg";
+        var from = doc.createElement("div");
+        var msg = doc.createElement("div");
+        
+        from.textContent = "[" + new Date(data.time).toTimeString().substring(0, 8) + "]";
         if (data.user) {
-            div.textContent = timestamp + "<" + data.user + "> " + data.msg;
+            msg.textContent = "<" + data.user + "> " + data.msg;
         } else {
-            div.innerHTML = timestamp + "<strong>* " + data.msg + "</strong>";
+            msg.innerHTML = "<strong>* " + data.msg + "</strong>";
         }
+        
+        div.className = "chat-msg";
+        div.appendChild(from);
+        div.appendChild(msg);
         chatRoll.appendChild(div);
+        chatRoll.scrollTop = chatRoll.scrollHeight;
     }
     
     function showUsers(users) {
-        users.sort();
+        users.sort(function(str1, str2) {
+            return (str1.toLocaleLowerCase() < str2.toLocaleLowerCase() ? -1 : 1);
+        });
         var frag = doc.createDocumentFragment();
         users.forEach(function(user) {
             var div = doc.createElement("div");
@@ -124,7 +135,7 @@
         }
         
         addMessage({
-            time: JSON.parse(JSON.stringify(new Date())),
+            time: new Date(),
             user: nick,
             msg: msg
         });
@@ -142,4 +153,4 @@
         }
     });
     chatForm.addEventListener("submit", sendMessage);
-})(document);
+})(window, document);

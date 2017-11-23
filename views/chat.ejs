@@ -1,8 +1,14 @@
 <h1>Chatt</h1>
-<p>blubb</p>
+<p>Testa chattservern här!</p>
 <form id="nick-form">
-    <p><label>Smeknamn: <input type="text" name="nick" required></label></p>
-    <p><label>Server: <input type="text" name="url" value="ws://" required></label></p>
+    <p>
+        <label>Smeknamn:</label>
+        <input type="text" name="nick" maxlength="20" required autofocus>
+    </p>
+    <p>
+        <label>Server:</label>
+        <input type="text" name="url" value="ws://" required>
+    </p>
     <input type="submit" name="connect" value="Anslut">
     <input type="button" name="disconnect" value="Koppla från" disabled>
 </form>
@@ -10,8 +16,7 @@
     <div id="chat-roll"></div>
     <div id="chat-list"></div>
     <form id="chat-form">
-        <label id="chat-nick"></label>
-        <input type="text" name="msg" autofocus>
+        <input type="text" name="msg">
         <input type="submit" value="Skicka">
     </form>
 </div>

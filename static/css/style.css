@@ -135,6 +135,48 @@ h6 {
     font-size: 1.25em;
 }
 
+label {
+    font-weight: 700;
+}
+
+input,
+button {
+    margin-right: .25em;
+    font-family: inherit;
+    font-size: inherit;
+    line-height: inherit;
+}
+
+input[type=text] {
+    padding: .25em .5em;
+    border: 1px solid #888;
+}
+
+input[type=submit],
+input[type=button],
+button {
+    padding: .25em .5em;
+    color: #333;
+    background-color: #eee;
+    border: 1px solid #333;
+    cursor: pointer;
+}
+
+input[type=submit]:disabled,
+input[type=button]:disabled,
+button:disabled {
+    color: #888;
+    border-color: #888;
+    cursor: auto;
+}
+
+input::-moz-focus-inner,
+button::-moz-focus-inner {
+    margin: 0;
+    padding: 0;
+    border: none;
+}
+
 
 #title {
     position: relative;
@@ -215,6 +257,87 @@ footer a {
 }
 
 
+#chat-container {
+    margin: 2em 0 1em;
+    padding-top: 2em;
+    border-top: 1px solid rgba(0, 0, 0, .15);
+    display: flex;
+    flex-wrap: wrap;
+}
+
+#chat-roll {
+    height: 28em;
+    max-height: 75vh;
+    padding: 0 .75em;
+    background-image: linear-gradient(#f2f2f2, #fff);
+    border: 1px solid rgba(0, 0, 0, .15);
+    word-wrap: break-word;
+    overflow-y: auto;
+    flex: 1 1 80%;
+}
+
+.chat-msg {
+    display: flex;
+}
+
+.chat-msg:first-child {
+    margin-top: .5em;
+}
+
+.chat-msg:last-child {
+    margin-bottom: .5em;
+}
+
+.chat-msg > div:first-child {
+    padding-right: .25em;
+    flex: 0 0 auto;
+}
+
+.chat-msg > div:last-child {
+    flex: 1 1 auto;
+}
+
+#chat-list {
+    margin-left: 1em;
+    padding: .25em 0;
+    border: 1px dashed rgba(0, 0, 0, .15);
+    overflow-y: auto;
+    flex: 0 1 calc(20% - 1em);
+}
+
+#chat-list > div {
+    padding: .25em .75em;
+    text-overflow: hidden;
+    white-space: nowrap;
+    overflow: hidden;
+}
+
+#chat-form {
+    margin-top: 1em;
+    display: flex;
+    flex-basis: 100%;
+}
+
+#chat-form input[type=text] {
+    flex: 1 0 auto;
+}
+
+#chat-form input[type=submit] {
+    margin-left: .5em;
+}
+
+
+
+@media only screen and (max-width: 960px) {
+    #chat-roll {
+        flex-basis: 75%;
+    }
+    
+    #chat-list {
+        flex-basis: calc(25% - 1em);
+    }
+}
+
 
 @media only screen and (max-width: 767px) {
     h1 {
@@ -247,6 +370,13 @@ footer a {
     
     article {
         min-height: 0;
+    }
+    
+    #chat-list {
+        margin-top: 1em;
+        margin-left: 0;
+        flex-basis: 100%;
+        order: 3;
     }
 }
 
@@ -309,5 +439,9 @@ footer a {
     
     hr {
         width: 75%;
+    }
+    
+    label {
+        display: block;
     }
 }
