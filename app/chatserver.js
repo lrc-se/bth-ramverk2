@@ -14,16 +14,34 @@ var clients = {};
 var log = false;
 
 
+/**
+ * Handles socket protocol requests.
+ *
+ * @param   {Array}     protocols   List of requested protocols.
+ *
+ * @returns {string|false}          Selected protocol, or false if no supported protocol found.
+ */
 function handleProtocols(protocols) {
     return (~protocols.indexOf("v1") ? "v1" : false);
 }
 
 
+/**
+ * Handles client connection.
+ *
+ * @param   {object}    client  Client object.
+ */
 function handleConnection(client) {
     log && console.log(`Client connected (${client.request.connection.remoteAddress})`);
 }
 
 
+/**
+ * Handles client message.
+ *
+ * @param   {string}    data    Message contents.
+ * @param   {object}    client  Client object.
+ */
 function handleMessage(data, client) {
     log && console.log(`Received message (${client.request.connection.remoteAddress}):`, data);
     
@@ -59,11 +77,24 @@ function handleMessage(data, client) {
 }
 
 
+/**
+ * Handles client error.
+ *
+ * @param   {Error}     err     Error object.
+ * @param   {object}    client  Client object.
+ */
 function handleError(err, client) {
     log && console.error(`Socket error (${client.request.connection.remoteAddress}):`, err);
 }
 
 
+/**
+ * Handles client disconnection.
+ *
+ * @param   {number}    code    Closing code.
+ * @param   {string}    reason  Closing reason.
+ * @param   {object}    client  Client object.
+ */
 function handleDisconnection(code, reason, client) {
     let ip = client.request.connection.remoteAddress;
     if (!client.socket.pingPending) {
@@ -85,6 +116,14 @@ function handleDisconnection(code, reason, client) {
 }
 
 
+/**
+ * Builds a chat message for sending.
+ *
+ * @param   {string}    msg     Message to send.
+ * @param   {WebSocket} from    Sending client socket.
+ *
+ * @returns {object}            Populated message object.
+ */
 function buildMessage(msg, from) {
     let data = {
         time: new Date(),
@@ -97,16 +136,37 @@ function buildMessage(msg, from) {
 }
 
 
+/**
+ * Sends a chat message to a specified client.
+ *
+ * @param   {WebSocket} to      Receiving client socket.
+ * @param   {string}    msg     Message to send.
+ * @param   {WebSocket} [from]  Sending client socket, if any.
+ */
 function sendMessage(to, msg, from) {
     sendCmd(to, "msg", buildMessage(msg, from));
 }
 
 
+/**
+ * Broadcasts a chat message to all connected clients.
+ *
+ * @param   {string}    msg         Message to send.
+ * @param   {WebSocket} from        Sending client socket.
+ * @param   {WebSocket} [exclude]   Client socket to exclude from broadcast, if any.
+ */
 function broadcastMessage(msg, from, exclude) {
     broadcastCmd("msg", buildMessage(msg, from), exclude);
 }
 
 
+/**
+ * Sends a protocol command to a specified client.
+ *
+ * @param   {WebSocket} to      Receiving client socket.
+ * @param   {string}    cmd     Command to send.
+ * @param   {object}    data    Data payload.
+ */
 function sendCmd(to, cmd, data) {
     server.sendJSON(to, {
         cmd: cmd,
@@ -115,6 +175,13 @@ function sendCmd(to, cmd, data) {
 }
 
 
+/**
+ * Broadcasts a protocol command to all connected clients.
+ *
+ * @param   {string}    cmd         Command to send.
+ * @param   {object}    data        Data payload.
+ * @param   {WebSocket} [exclude]   Client socket to exclude from broadcast, if any.
+ */
 function broadcastCmd(cmd, data, exclude) {
     server.broadcastJSON({
         cmd: cmd,
