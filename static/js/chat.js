@@ -1,7 +1,7 @@
 (function(win, doc) {
     "use strict";
     
-    var nickForm = doc.getElementById("nick-form");
+    var connectForm = doc.getElementById("connect-form");
     var chatForm = doc.getElementById("chat-form");
     var chatRoll = doc.getElementById("chat-roll");
     var chatList = doc.getElementById("chat-list");
@@ -9,16 +9,37 @@
     var ws;
     
     
+    function showChat() {
+        doc.getElementById("chat-container").style.display = "flex";
+        connectForm.nick.disabled = true;
+        connectForm.url.disabled = true;
+        connectForm.connect.disabled = true;
+        connectForm.disconnect.disabled = false;
+        win.scrollTo(0, chatForm.offsetTop);
+        chatForm.msg.focus();
+    }
+    
+    function hideChat() {
+        doc.getElementById("chat-container").style.display = "none";
+        connectForm.nick.disabled = false;
+        connectForm.url.disabled = false;
+        connectForm.connect.disabled = false;
+        connectForm.disconnect.disabled = true;
+        connectForm.style.display = "block";
+        chatRoll.innerHTML = "";
+        chatForm.msg.value = "";
+    }
+    
     function connect(e) {
         e.preventDefault();
         
-        nick = nickForm.nick.value;
+        nick = connectForm.nick.value;
         if (!nick) {
             alert("Du måste ange ett smeknamn.");
             return;
         }
         
-        var url = nickForm.url.value;
+        var url = connectForm.url.value;
         if (!url) {
             alert("Du måste ange en serveradress.");
             return;
@@ -27,13 +48,17 @@
         try {
             ws = new WebSocket(url, "v1");
         } catch (ex) {
-            alert("Kunde inte öppna anslutningen. Felmeddelande:\n\n" + ex.message);
+            alert(
+                "Kunde inte öppna anslutningen." +
+                (ex.message ? "Felmeddelande: " + ex.message : "")
+            );
             return;
         }
         
         ws.onopen = function() {
             sendCmd("nick", nick);
         };
+        
         ws.onmessage = function(e) {
             var data;
             try {
@@ -45,13 +70,7 @@
             
             switch (data.cmd) {
                 case "welcome":
-                    doc.getElementById("chat-container").style.display = "flex";
-                    nickForm.nick.disabled = true;
-                    nickForm.url.disabled = true;
-                    nickForm.connect.disabled = true;
-                    nickForm.disconnect.disabled = false;
-                    win.scrollTo(0, chatForm.offsetTop);
-                    chatForm.msg.focus();
+                    showChat();
                     break;
                 case "unwelcome":
                     alert("Smeknamnet är upptaget.");
@@ -66,18 +85,15 @@
                     console.error("Unknown message:", data);
             }
         };
+        
         ws.onclose = function(e) {
             if (e.code !== 1000) {
-                alert("Anslutningen stängdes ner. Meddelande:\n\n" + e.reason);
+                alert(
+                    "Anslutningen stängdes ner." +
+                    (e.reason ? "Meddelande: " + e.reason : "")
+                );
             }
-            
-            doc.getElementById("chat-container").style.display = "none";
-            nickForm.nick.disabled = false;
-            nickForm.url.disabled = false;
-            nickForm.connect.disabled = false;
-            nickForm.disconnect.disabled = true;
-            nickForm.style.display = "block";
-            chatRoll.innerHTML = "";
+            hideChat();            
         };
     }
     
@@ -145,8 +161,8 @@
     }
     
     
-    nickForm.addEventListener("submit", connect);
-    nickForm.disconnect.addEventListener("click", function() {
+    connectForm.addEventListener("submit", connect);
+    connectForm.disconnect.addEventListener("click", function() {
         if (ws) {
             ws.close();
             ws = null;
