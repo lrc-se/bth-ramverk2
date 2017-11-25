@@ -52,27 +52,31 @@ function handleMessage(data, client) {
         return;
     }
     
-    let socket = client.socket;
     switch (data.cmd) {
-        case "nick": {
+        case "nick": {  // nickname selection
             let nick = data.data;
+            
+            // reject duplicate nicks
             if (clients[nick]) {
-                sendCmd(socket, "unwelcome", null);
-                socket.close();
+                sendCmd(client, "unwelcome", null);
+                client.socket.close();
                 return;
             }
             
-            socket.nick = nick;
-            clients[nick] = socket;
-            sendCmd(socket, "welcome", null);
+            // accept new client
+            client.nick = nick;
+            clients[nick] = client;
+            sendCmd(client, "welcome", null);
             broadcastCmd("users", Object.keys(clients));
-            broadcastMessage(`${nick} har anslutit sig`, null, socket);
-            sendMessage(socket, "Välkommen till chatten!");
+            broadcastMessage(`${nick} har anslutit sig`, null, client);
+            sendMessage(client, "Välkommen till chatten!");
             break;
         }
-        case "msg":
-            broadcastMessage(data.data, socket, socket);
+        case "msg":     // chat message
+            broadcastMessage(data.data, client, client);
             break;
+        default:        // unknown
+            log && console.error("Unknown message:", data);
     }
 }
 
@@ -103,7 +107,7 @@ function handleDisconnection(code, reason, client) {
         log && console.log(`Ping timeout (${ip})`);
     }
     
-    let nick = client.socket.nick;
+    let nick = client.nick;
     if (clients[nick]) {
         delete clients[nick];
         broadcastCmd("users", Object.keys(clients));
@@ -120,7 +124,7 @@ function handleDisconnection(code, reason, client) {
  * Builds a chat message for sending.
  *
  * @param   {string}    msg     Message to send.
- * @param   {WebSocket} from    Sending client socket.
+ * @param   {object}    from    Sending client.
  *
  * @returns {object}            Populated message object.
  */
@@ -139,9 +143,9 @@ function buildMessage(msg, from) {
 /**
  * Sends a chat message to a specified client.
  *
- * @param   {WebSocket} to      Receiving client socket.
+ * @param   {object}    to      Receiving client.
  * @param   {string}    msg     Message to send.
- * @param   {WebSocket} [from]  Sending client socket, if any.
+ * @param   {object}    [from]  Sending client, if any.
  */
 function sendMessage(to, msg, from) {
     sendCmd(to, "msg", buildMessage(msg, from));
@@ -152,8 +156,8 @@ function sendMessage(to, msg, from) {
  * Broadcasts a chat message to all connected clients.
  *
  * @param   {string}    msg         Message to send.
- * @param   {WebSocket} from        Sending client socket.
- * @param   {WebSocket} [exclude]   Client socket to exclude from broadcast, if any.
+ * @param   {object}    from        Sending client.
+ * @param   {object}    [exclude]   Client to exclude from broadcast, if any.
  */
 function broadcastMessage(msg, from, exclude) {
     broadcastCmd("msg", buildMessage(msg, from), exclude);
@@ -163,12 +167,12 @@ function broadcastMessage(msg, from, exclude) {
 /**
  * Sends a protocol command to a specified client.
  *
- * @param   {WebSocket} to      Receiving client socket.
+ * @param   {object}    to      Receiving client.
  * @param   {string}    cmd     Command to send.
  * @param   {object}    data    Data payload.
  */
 function sendCmd(to, cmd, data) {
-    server.sendJSON(to, {
+    server.sendJSON(to.socket, {
         cmd: cmd,
         data: data
     });
@@ -180,13 +184,15 @@ function sendCmd(to, cmd, data) {
  *
  * @param   {string}    cmd         Command to send.
  * @param   {object}    data        Data payload.
- * @param   {WebSocket} [exclude]   Client socket to exclude from broadcast, if any.
+ * @param   {object}    [exclude]   Client to exclude from broadcast, if any.
  */
 function broadcastCmd(cmd, data, exclude) {
-    server.broadcastJSON({
-        cmd: cmd,
-        data: data
-    }, exclude);
+    let obj = { cmd, data };
+    if (exclude) {
+        server.broadcastJSON(obj, exclude.socket);
+    } else {
+        server.broadcastJSON(obj);
+    }
 }
 
 
