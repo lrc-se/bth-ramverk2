@@ -266,7 +266,82 @@
 </section>
 <section id="kmom04">
     <h2>Kmom04</h2>
-    <p>blubb</p>
+    <p>
+        Jag skrev först hela serverdelen av chatten i en stor klump, men så fort den uppnått fungerande status bröt jag ut själva socketdelen till en fristående, mer allmän komponent. 
+        Planen är att använda den sistnämnda både för projektet och för modulen i Kmom06, både för att den är just allmän och för att chatt&shy;funktionen 
+        kommer att vara en integrerad del i ett större realtids&shy;sammanhang i applikationen (se nedan) och alltså inte låter sig isoleras på ett enkelt sätt.
+    </p>
+    <p>
+        Efter att ha färdigställt klientdelen gav jag mig sedan på att skapa en testserie för serverdelen, vilket efter många problem började arta sig rätt bra med existerande verktyg. 
+        Här använder jag ingen mockning, utan servern startas upp på nytt för varje test och det etableras riktiga anslutningar med riktiga meddelanden. 
+        För att kunna testa alla ingående kommandon (se nedan) behövde testen hålla reda på ordningen hos skickade och mottagna meddelanden, 
+        då dessa förekommer i en viss sekvens beroende på vad som händer (t.ex. att det skickas ut en uppdaterad användar&shy;lista till alla efter att en ny person anslutit sig), 
+        vilket krävde en del tanke&shy;verksamhet.
+    </p>
+    <p>
+        Testen fungerar nu fint, men de är också något sårbara i och med att de förutsätter att meddelanden anländer till mottagaren i samma ordning som de skickades, 
+        vilket inte nödvändigtvis kommer vara fallet i drift över det publika nätet, men så länge man testar i utvecklings&shy;miljön går det bra. 
+        Visst skulle det gå att hantera osynkade ankomster också, men jag har inte haft tid eller ork att implementera den typen av uppsamling här.
+    </p>
+    <p>
+        Slutligen är jag tveksam till om detta verkligen är att betrakta som <em>enhets</em>test – det känns mer som <em>funktions</em>test, 
+        men jag ville i alla fall få med någon form av test här. Resten av me-servern är dock fortfarande otestad, då detta <em>definitivt</em> är fråga om det senare. 
+        Notera även att klientsides&shy;skriptet också är undantaget, då detta är hårt knutet till DOM:en och inte är att betrakta som fristående – 
+        det är för övrigt svårt att uppnå just fristående status över huvud taget i webbläsar&shy;miljö utan kompilering, så det får vara, åtminstone för stunden.
+    </p>
+    <h5>Är du ny på realtids&shy;programmering eller har du gjort liknande tidigare?</h5>
+    <p>
+        Jag har gjort liknande tidigare, med <i>stream sockets</i> i Java – det är som nämndes i förra momentet just detta som utgör inspirationen till den applikation jag valt. 
+        Begreppen och teknikerna är jag därför bekant med, men de är som sagt enklare att hantera inom ramarna för JS och Node där allt (eller åtminstone det mesta) 
+        är asynkront redan från början, så man behöver inte implementera själva multi&shy;trådningen på egen hand.
+    </p>
+    <h5>Hur gick det att jobba med konceptet realtids&shy;programmering i webben? Några reflektioner?</h5>
+    <p>
+        Egentligen inte; abstraktions&shy;lagret gör att det känns precis som att använda direkta anslutningar enligt ovan. 
+        Det enda som är lite synd är att det inte finns integrerat stöd för timeouter, vilket skulle varit önskvärt. 
+        I övrigt öppnar tekniken upp fler möjligheter än det fanns tidigare – eller åtminstone förenklar dem avsevärt, 
+        då man slipper "fullösningar" av olika slag för att simulera realtids&shy;uppdateringar av <i>push</i>-typ.
+    </p>
+    <h5>Berätta om din chatt som du integrerade i redovisa-sidan.</h5>
+    <p>
+        För implementationen valde jag rena <i>Web Sockets</i>, med <code>ws</code> på serversidan, då det kändes bättre att få koll på grundtekniken än att gå på en abstraktion direkt. 
+        Koden utgår därmed från/<wbr>påminner om den i exemplen, både dbwebbs och <code>ws</code>', men med en del egna förändringar, förbättringar och upplägg.
+    </p>
+    <p>
+        Chatt&shy;systemet bygger på ett enkelt JSON-protokoll av allmänt format: ett fält <code>cmd</code> (sträng) som betecknar det kommando som skall utföras och ett fält <code>data</code> 
+        (godtycklig datatyp) som innehåller eventuella tillhörande data. Jag har även lagt till stöd för sub&shy;protokollet <code>"v1"</code> på enklast möjliga sätt, 
+        nämligen att servern för närvarande förkastar alla andra protokolls&shy;förslag.
+    </p>
+    <p>
+        Servern kan skicka fyra olika kommandon: <code>welcome</code> (anslutningen accepteras och klienten släpps in i chatten), <code>unwelcome</code> (klienten släpps inte in),
+        <code>users</code> (lista på anslutna användare) samt <code>msg</code> (chatt&shy;meddelande), där det sistnämnda innehåller tidsstämpel, smeknamn och meddelande&shy;text. 
+        Klienten kan förstå dessa och skicka två egna: <code>nick</code> (begär att få ansluta med ett visst smeknamn) och <code>msg</code> (skicka chatt&shy;meddelande). 
+        Både klient och server har hjälpmetoder för att hantera tolkning och sändning av kommandon.
+    </p>
+    <p>
+        Klienten är enkelt uppbyggd, där man först får välja smeknamn och serveradress. När man klickar på "Anslut" skickas en begäran om inloggning till servern, 
+        som antingen accepterar denna eller avslår den om smeknamnet är upptaget. Om man släpps in dyker chatt&shy;fönstret upp tillsammans med en lista på anslutna användare till höger. 
+        Skriver meddelanden gör man som vanligt och när man ledsnat klickar man på "Koppla från" och kan börja om från början. Layouten är även responsiv, med lite flexbox&shy;tricks.
+    </p>
+    <p>
+        Vad gäller extra&shy;uppgifterna har jag redan berört användar&shy;listan (#4) och eftersom jag skapar konkreta DOM-noder och använder <code>textContent</code>-egenskapen 
+        på klientsidan tolkas meddelandena aldrig som HTML (#2). Den största pucken blev istället #1, där jag har skapat allmän pingkod (i den fristående <code>ws-server</code>-modulen) 
+        med stöd för godtyckliga timeoutvärden (eller inget alls). Chattservern kan sedan känna igen ifall en anslutning avbrutits av denna anledning och skicka ut ett passande meddelande, 
+        men eftersom det är svårt att simulera denna situation har jag bara kunnat testa koden genom att tillfälligt vända på villkoret, d.v.s. att ett <em>icke</em> 
+        uteblivet "pong" gör att man kastas ut.
+    </p>
+    <h5>Berätta om den realtids&shy;funktionalitet du väljer att integrera i din klient/server-applikation.</h5>
+    <p>
+        I princip hela spelet kommer att bygga på <i>Web Sockets</i>, då det är av vikt att alla anslutna spelare uppdateras om vad som händer – 
+        vad som ritas och vad som sägs – direkt <em>när</em> det händer. WS-komponenten kommer därför att vara central i applikationen, 
+        både på servern och i klienten, där ett JSON-protokoll sedan står för data&shy;utväxlingen på applikations&shy;nivå.
+    </p>
+    <p>
+        Jag har en del tankar om hur detta kommer att se ut vad det lider – återigen utgående från Java&shy;implementationen – 
+        men eftersom det som sagt kommer bli så genomgående har jag inte gjort något mer än att kopiera in WS-server&shy;modulen från me-sidan ännu. 
+        Av samma anledning finns inga test för denna i det här repot för tillfället, utan detta får anses vara täckt av ovanstående samt bli en fråga för när modulen bryts ut helt och hållet. 
+        Fortsättning följer.
+    </p>
 </section>
 <section id="kmom05">
     <h2>Kmom05</h2>
