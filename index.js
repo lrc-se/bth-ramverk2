@@ -15,7 +15,7 @@ const chatServer = require("./app/chatserver");
 var server = http.createServer(app);
 chatServer.init({
     server: server,
-    log: true
+    log: false
 });
 
 // start server
