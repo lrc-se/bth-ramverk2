@@ -269,13 +269,13 @@
     <p>
         Jag skrev först hela serverdelen av chatten i en stor klump, men så fort den uppnått fungerande status bröt jag ut själva socketdelen till en fristående, mer allmän komponent. 
         Planen är att använda den sistnämnda både för projektet och för modulen i Kmom06, både för att den är just allmän och för att chatt&shy;funktionen 
-        kommer att vara en integrerad del i ett större realtids&shy;sammanhang i applikationen (se nedan) och alltså inte låter sig isoleras på ett enkelt sätt.
+        kommer att vara en integrerad del i ett större realtids&shy;sammanhang i applikationen (se nedan) och alltså inte låter sig isoleras på ett enkelt sätt där.
     </p>
     <p>
         Efter att ha färdigställt klientdelen gav jag mig sedan på att skapa en testserie för serverdelen, vilket efter många problem började arta sig rätt bra med existerande verktyg. 
         Här använder jag ingen mockning, utan servern startas upp på nytt för varje test och det etableras riktiga anslutningar med riktiga meddelanden. 
         För att kunna testa alla ingående kommandon (se nedan) behövde testen hålla reda på ordningen hos skickade och mottagna meddelanden, 
-        då dessa förekommer i en viss sekvens beroende på vad som händer (t.ex. att det skickas ut en uppdaterad användar&shy;lista till alla efter att en ny person anslutit sig), 
+        då dessa förekommer i en viss sekvens beroende på vad som händer (t.ex. att det skickas ut en uppdaterad användar&shy;lista till alla klienter efter att en ny person anslutit sig), 
         vilket krävde en del tanke&shy;verksamhet.
     </p>
     <p>
@@ -285,7 +285,7 @@
     </p>
     <p>
         Slutligen är jag tveksam till om detta verkligen är att betrakta som <em>enhets</em>test – det känns mer som <em>funktions</em>test, 
-        men jag ville i alla fall få med någon form av test här. Resten av me-servern är dock fortfarande otestad, då detta <em>definitivt</em> är fråga om det senare. 
+        men jag ville i alla fall få med någon form av test här. Resten av me-servern är dock fortfarande otestad, då detta <em>definitivt</em> skulle vara fråga om det senare. 
         Notera även att klientsides&shy;skriptet också är undantaget, då detta är hårt knutet till DOM:en och inte är att betrakta som fristående – 
         det är för övrigt svårt att uppnå just fristående status över huvud taget i webbläsar&shy;miljö utan kompilering, så det får vara, åtminstone för stunden.
     </p>
@@ -304,31 +304,33 @@
     </p>
     <h5>Berätta om din chatt som du integrerade i redovisa-sidan.</h5>
     <p>
-        För implementationen valde jag rena <i>Web Sockets</i>, med <code>ws</code> på serversidan, då det kändes bättre att få koll på grundtekniken än att gå på en abstraktion direkt. 
-        Koden utgår därmed från/<wbr>påminner om den i exemplen, både dbwebbs och <code>ws</code>', men med en del egna förändringar, förbättringar och upplägg.
+        För implementationen valde jag rena <i>Web Sockets</i>, med modulen <code>ws</code> på serversidan, då det kändes bättre att få koll på grundtekniken än att gå på en abstraktion direkt. 
+        Koden utgår därmed från/<wbr>påminner om den i exemplen, hos både dbwebb och <code>ws</code>, men med en del egna förändringar, förbättringar och upplägg. 
+        Servern kan logga händelser till terminalen, vilket slås på med en konfigurations&shy;egenskap i samband med initieringen, 
+        men för att applikationen skall fungera i utloggat läge på studentservern är detta avslaget nu, liksom i testserien för att slippa utskrifter där.
     </p>
     <p>
         Chatt&shy;systemet bygger på ett enkelt JSON-protokoll av allmänt format: ett fält <code>cmd</code> (sträng) som betecknar det kommando som skall utföras och ett fält <code>data</code> 
         (godtycklig datatyp) som innehåller eventuella tillhörande data. Jag har även lagt till stöd för sub&shy;protokollet <code>"v1"</code> på enklast möjliga sätt, 
-        nämligen att servern för närvarande förkastar alla andra protokolls&shy;förslag.
+        nämligen att servern för närvarande förkastar alla andra protokoll&shy;förslag.
     </p>
     <p>
         Servern kan skicka fyra olika kommandon: <code>welcome</code> (anslutningen accepteras och klienten släpps in i chatten), <code>unwelcome</code> (klienten släpps inte in),
         <code>users</code> (lista på anslutna användare) samt <code>msg</code> (chatt&shy;meddelande), där det sistnämnda innehåller tidsstämpel, smeknamn och meddelande&shy;text. 
         Klienten kan förstå dessa och skicka två egna: <code>nick</code> (begär att få ansluta med ett visst smeknamn) och <code>msg</code> (skicka chatt&shy;meddelande). 
-        Både klient och server har hjälpmetoder för att hantera tolkning och sändning av kommandon.
+        Både klient och server har hjälpmetoder för att hantera protokoll&shy;formatet.
     </p>
     <p>
         Klienten är enkelt uppbyggd, där man först får välja smeknamn och serveradress. När man klickar på "Anslut" skickas en begäran om inloggning till servern, 
         som antingen accepterar denna eller avslår den om smeknamnet är upptaget. Om man släpps in dyker chatt&shy;fönstret upp tillsammans med en lista på anslutna användare till höger. 
-        Skriver meddelanden gör man som vanligt och när man ledsnat klickar man på "Koppla från" och kan börja om från början. Layouten är även responsiv, med lite flexbox&shy;tricks.
+        Skriver meddelanden gör man som vanligt och när man ledsnat klickar man på "Koppla från" och kan börja om från början. Layouten är även responsiv, med lite flexbox&shy;trick.
     </p>
     <p>
         Vad gäller extra&shy;uppgifterna har jag redan berört användar&shy;listan (#4) och eftersom jag skapar konkreta DOM-noder och använder <code>textContent</code>-egenskapen 
-        på klientsidan tolkas meddelandena aldrig som HTML (#2). Den största pucken blev istället #1, där jag har skapat allmän pingkod (i den fristående <code>ws-server</code>-modulen) 
-        med stöd för godtyckliga timeoutvärden (eller inget alls). Chattservern kan sedan känna igen ifall en anslutning avbrutits av denna anledning och skicka ut ett passande meddelande, 
-        men eftersom det är svårt att simulera denna situation har jag bara kunnat testa koden genom att tillfälligt vända på villkoret, d.v.s. att ett <em>icke</em> 
-        uteblivet "pong" gör att man kastas ut.
+        på klientsidan tolkas meddelandena aldrig som HTML (#2). Den största pucken blev istället #1, där jag har skapat allmän kod för ping (i den fristående <code>ws-server</code>-modulen) 
+        med stöd för godtyckliga timeoutvärden (30 sekunder i detta fall). Chattservern kan sedan känna igen ifall en anslutning avbrutits av denna anledning och skicka ut ett passande meddelande, 
+        men eftersom det är svårt att simulera denna situation har jag bara kunnat testa koden genom att tillfälligt vända på villkoret, d.v.s. att det är ett <em>icke</em> 
+        uteblivet "pong" som gör att man kastas ut. #3 har jag inte gjort.
     </p>
     <h5>Berätta om den realtids&shy;funktionalitet du väljer att integrera i din klient/server-applikation.</h5>
     <p>
@@ -338,9 +340,9 @@
     </p>
     <p>
         Jag har en del tankar om hur detta kommer att se ut vad det lider – återigen utgående från Java&shy;implementationen – 
-        men eftersom det som sagt kommer bli så genomgående har jag inte gjort något mer än att kopiera in WS-server&shy;modulen från me-sidan ännu. 
-        Av samma anledning finns inga test för denna i det här repot för tillfället, utan detta får anses vara täckt av ovanstående samt bli en fråga för när modulen bryts ut helt och hållet. 
-        Fortsättning följer.
+        men eftersom det som sagt kommer bli så genomgående har jag än så länge bara kopierat in WS-server&shy;modulen från me-sidan och skruvat lite lätt på den. 
+        Av samma anledning finns inga test för denna i <i>app/server</i>-repot för tillfället, 
+        utan detta får anses vara täckt av ovanstående och/eller bli en fråga för när modulen bryts ut helt och hållet. Fortsättning följer.
     </p>
 </section>
 <section id="kmom05">
