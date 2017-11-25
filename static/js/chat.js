@@ -113,7 +113,9 @@
         if (data.user) {
             msg.textContent = "<" + data.user + "> " + data.msg;
         } else {
-            msg.innerHTML = "<strong>* " + data.msg + "</strong>";
+            var strong = doc.createElement("strong");
+            strong.textContent = "* " + data.msg;
+            msg.appendChild(strong);
         }
         
         div.className = "chat-msg";
