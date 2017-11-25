@@ -11,6 +11,7 @@ const wsServer = require("./ws-server");
 
 var server;
 var clients = {};
+var log = false;
 
 
 function handleProtocols(protocols) {
@@ -19,17 +20,17 @@ function handleProtocols(protocols) {
 
 
 function handleConnection(client) {
-    console.log(`Client connected (${client.request.connection.remoteAddress})`);
+    log && console.log(`Client connected (${client.request.connection.remoteAddress})`);
 }
 
 
 function handleMessage(data, client) {
-    console.log(`Received message (${client.request.connection.remoteAddress}):`, data);
+    log && console.log(`Received message (${client.request.connection.remoteAddress}):`, data);
     
     try {
         data = JSON.parse(data);
     } catch (ex) {
-        console.error("Illegal message format");
+        log && console.error("Illegal message format");
         return;
     }
     
@@ -59,16 +60,16 @@ function handleMessage(data, client) {
 
 
 function handleError(err, client) {
-    console.error(`Socket error (${client.request.connection.remoteAddress}):`, err);
+    log && console.error(`Socket error (${client.request.connection.remoteAddress}):`, err);
 }
 
 
 function handleDisconnection(code, reason, client) {
     let ip = client.request.connection.remoteAddress;
     if (!client.socket.pingPending) {
-        console.log(`Client disconnected (${ip}):`, code, reason);
+        log && console.log(`Client disconnected (${ip}):`, code, reason);
     } else {
-        console.log(`Ping timeout (${ip})`);
+        log && console.log(`Ping timeout (${ip})`);
     }
     
     let nick = client.socket.nick;
@@ -126,18 +127,22 @@ const ChatServer = {
     /**
      * Initializes the server.
      *
-     * @param   {http.Server}   httpServer  HTTP server instance.
+     * @param   {object}        config          Configuration object:
+     * @param   {http.Server}   config.server     HTTP server instance.
+     * @param   {number}        [config.timeout]  Ping timeout in milliseconds (defaults to 30000).
+     * @param   {boolean}       [config.log]      Whether to output log messages to console.
      */
-    init: function(httpServer) {
+    init: function(config) {
         server = wsServer({
-            server: httpServer,
-            timeout: 30000,
+            server: config.server,
+            timeout: (config.timeout !== undefined ? config.timeout : 30000),
             protocolHandler: handleProtocols,
             connectionHandler: handleConnection,
             messageHandler: handleMessage,
             errorHandler: handleError,
             closeHandler: handleDisconnection
         });
+        log = !!config.log;
     }
 };
 

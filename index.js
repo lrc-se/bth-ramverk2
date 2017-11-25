@@ -13,7 +13,10 @@ const chatServer = require("./app/chatserver");
 
 // create server
 var server = http.createServer(app);
-chatServer.init(server);
+chatServer.init({
+    server: server,
+    log: true
+});
 
 // start server
 var port = (!isNaN(process.env.DBWEBB_PORT) ? +process.env.DBWEBB_PORT : 1337);
