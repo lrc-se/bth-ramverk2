@@ -7,6 +7,7 @@
 "use strict";
 
 const express = require("express");
+const bodyParser = require("body-parser");
 const path = require("path");
 const util = require("./util");
 
@@ -15,6 +16,10 @@ const util = require("./util");
 var app = express();
 app.set("view engine", "ejs");
 app.use(express.static(path.join(__dirname, "../static")));
+
+// set up parsers
+app.use(bodyParser.urlencoded({ extended: true }));
+app.use(bodyParser.json());
 
 // set up routes
 require("../routes/routes").setup(app);
