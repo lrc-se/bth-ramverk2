@@ -33,7 +33,7 @@ const repoProto = {
     /**
      * Finds a document by key.
      *
-     * @param   {string}    key     Field name.
+     * @param   {string}    key     Field name (pass null to use primary key).
      * @param   {any}       value   Field value.
      *
      * @returns {Promise}           Promise with retrieved document as value.
@@ -44,8 +44,13 @@ const repoProto = {
             query = {};
             query[key] = value;
         } else {
-            query = Id(value);
+            if (Id.isValid(value)) {
+                query = Id(value);
+            } else {
+                return Promise.resolve(null);
+            }
         }
+        
         return this.collection.findOne(query);
     },
     
