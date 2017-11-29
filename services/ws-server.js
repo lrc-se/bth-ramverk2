@@ -1,7 +1,7 @@
 /**
  * Web Sockets server.
  *
- * @module  app/ws-server
+ * @module  services/ws-server
  */
 
 "use strict";

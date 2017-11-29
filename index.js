@@ -8,7 +8,7 @@
 
 const http = require("http");
 const app = require("./app/app");
-const chatServer = require("./app/chatserver");
+const chatServer = require("./services/chatserver");
 
 
 // create server

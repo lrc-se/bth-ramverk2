@@ -6,7 +6,7 @@
 
 const tap = require("tap");
 const http = require("http");
-const chatServer = require("../app/chatserver");
+const chatServer = require("../services/chatserver");
 const WebSocket = require("ws");
 
 

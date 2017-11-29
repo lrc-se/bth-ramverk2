@@ -1,7 +1,7 @@
 /**
  * Chat server.
  *
- * @module  app/chatserver
+ * @module  services/chatserver
  */
 
 "use strict";
