@@ -18,6 +18,10 @@ var menu = [
         route: "/chat"
     },
     {
+        title: "Databas",
+        route: "/ships"
+    },
+    {
         title: "Redovisningar",
         route: "/report"
     }
@@ -26,6 +30,7 @@ var menu = [
 -%>
 <ul>
 <% for(var item of menu) { -%>
-    <li<%- (req.route && req.route.path == item.route ? ' class="active"' : "") %>><a href="<%= item.route %>"><%= item.title %></a></li>
+    <%_ var attr = ((item.route == "/" && req.originalUrl == "/") || (item.route != "/" && req.originalUrl.startsWith(item.route)) ? ' class="active"' : ""); -%>
+    <li<%- attr %>><a href="<%= item.route %>"><%= item.title %></a></li>
 <% } -%>
 </ul>
