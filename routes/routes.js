@@ -11,6 +11,10 @@ var routes = [
     {
         base: "/",
         file: "default"
+    },
+    {
+        base: "/ships",
+        file: "ships"
     }
 ];
 
