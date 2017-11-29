@@ -10,3 +10,16 @@ services:
         ports:
             - 27017:27017
         command: mongod
+
+    express:
+        image: "node:alpine"
+        working_dir: /home/node/app/
+        environment:
+            - DBWEBB_DSN=mongodb://mongodb:27017/ramverk2
+        volumes:
+            - ./:/home/node/app/
+        ports:
+            - 1337:1337
+        links:
+            - mongodb
+        command: "npm start"
