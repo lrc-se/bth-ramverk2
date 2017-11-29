@@ -1,37 +1,12 @@
 version: "3"
 services:
-    node4:
-        image: "node:4"
-        user: "node"
-        working_dir: /home/node/app/
+    mongodb:
+        image: mongo
+        container_name: "mongodb"
         environment:
-            - DBWEBB_PORT=8101
+            - MONGO_DATA_DIR=/data/db
         volumes:
-            - ./:/home/node/app/
+            - ./data/db:/data/db
         ports:
-            - "8101:8101"
-        command: "npm start"
-        
-    node8:
-        image: "node:8"
-        user: "node"
-        working_dir: /home/node/app/
-        environment:
-            - DBWEBB_PORT=8102
-        volumes:
-            - ./:/home/node/app/
-        ports:
-            - "8102:8102"
-        command: "npm start"
-        
-    node9:
-        image: "node:9"
-        user: "node"
-        working_dir: /home/node/app/
-        environment:
-            - DBWEBB_PORT=8103
-        volumes:
-            - ./:/home/node/app/
-        ports:
-            - "8103:8103"
-        command: "npm start"
+            - 27017:27017
+        command: mongod
