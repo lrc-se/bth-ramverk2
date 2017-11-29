@@ -1,0 +1,35 @@
+<% if(errors.length) { -%>
+<%= errors.join(" ") %>
+<% } -%>
+<form action="<%= action %>" method="post">
+    <%_ if(ship._id) { -%>
+    <input type="hidden" name="_id" value="<%= ship._id %>">
+    <%_ } -%>
+    <p>
+        <label>Registreringsnummer:</label>
+        <input type="text" name="registry" value="<%= ship.registry || "" %>" required autofocus>
+    </p>
+    <p>
+        <label>Namn:</label>
+        <input type="text" name="name" value="<%= ship.name || "" %>" required>
+    </p>
+    <p>
+        <label>Klass:</label>
+        <input type="text" name="class" value="<%= ship["class"] || "" %>" required>
+    </p>
+    <p>
+        <label>Första tjänsteår:</label>
+        <input type="number" name="commissioned" value="<%= (ship.commissioned !== null ? ship.commissioned : "") %>" required>
+    </p>
+    <p>
+        <label>Sista tjänsteår:</label>
+        <input type="number" name="decommissioned" value="<%= (ship.decommissioned !== null ? ship.decommissioned : "") %>">
+    </p>
+    <p>
+        <label><input type="checkbox" name="destroyed"<%= (ship.destroyed ? " checked" : "") %>> Förstörd</label>
+    </p>
+    <p>
+        <input type="submit" value="<%= (ship._id ? "Uppdatera" : "Lägg till") %>">
+        <a class="btn" href="/ships">Avbryt</a>
+    </p>
+</form>

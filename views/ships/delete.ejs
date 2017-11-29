@@ -1,0 +1,23 @@
+<h1>Ta bort stjärn&shy;kryssare</h1>
+<p>Är du säker på att du vill ta bort denna stjärn&shy;kryssare?</p>
+<dl>
+    <dt>ID</dt>
+    <dd><%= ship._id %></dd>
+    <dt>Reg.nr</dt>
+    <dd><%= ship.registry %></dd>
+    <dt>Namn</dt>
+    <dd><%= ship.name %></dd>
+    <dt>Klass</dt>
+    <dd><%= ship["class"] %></dd>
+    <dt>Första tjänsteår</dt>
+    <dd><%= ship.commissioned %></dd>
+    <dt>Sista tjänsteår</dt>
+    <dd><%= (ship.decommissioned !== null ? ship.decommissioned : "–") %></dd>
+    <dt>Förstörd</dt>
+    <dd><%= (ship.destroyed ? "Ja" : "Nej") %></dd>
+</dl>
+<form action="/ships/delete/<%= ship._id %>" method="post">
+    <input type="hidden" name="action" value="delete">
+    <input type="submit" value="Ta bort">
+    <a class="btn" href="/ships">Avbryt</a>
+</form>
