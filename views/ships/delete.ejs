@@ -1,5 +1,6 @@
 <h1>Ta bort stjärn&shy;kryssare</h1>
 <p>Är du säker på att du vill ta bort denna stjärn&shy;kryssare?</p>
+<br>
 <dl>
     <dt>ID</dt>
     <dd><%= ship._id %></dd>
@@ -16,6 +17,7 @@
     <dt>Förstörd</dt>
     <dd><%= (ship.destroyed ? "Ja" : "Nej") %></dd>
 </dl>
+<br>
 <form action="/ships/delete/<%= ship._id %>" method="post">
     <input type="hidden" name="action" value="delete">
     <input type="submit" value="Ta bort">

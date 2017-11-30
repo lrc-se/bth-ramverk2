@@ -34,7 +34,8 @@ a:visited {
 
 p,
 ul,
-ol {
+ol,
+dl {
     margin: 0 0 1em;
 }
 
@@ -46,6 +47,22 @@ ol li {
 ul li:last-child,
 ol li:last-child {
     margin-bottom: 0;
+}
+
+dl {
+    display: flex;
+    flex-wrap: wrap;
+}
+
+dt {
+    font-weight: 700;
+    text-align: right;
+    flex: 0 0 125px;
+}
+
+dd {
+    margin-left: 1em;
+    flex: 1 1 calc(100% - 125px - 1em);
 }
 
 hr {
@@ -494,6 +511,20 @@ tr:last-child td {
     
     h4 {
         font-size: 1.333em;
+    }
+    
+    dt {
+        text-align: left;
+        flex-basis: 100%;
+    }
+    
+    dd {
+        margin-bottom: 1em;
+        flex-basis: 100%;
+    }
+    
+    dd:last-child {
+        margin-bottom: 0;
     }
     
     hr {
