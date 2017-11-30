@@ -135,10 +135,6 @@ h6 {
     font-size: 1.25em;
 }
 
-label {
-    font-weight: 700;
-}
-
 input,
 button {
     margin-right: .25em;
@@ -147,18 +143,22 @@ button {
     line-height: inherit;
 }
 
-input[type=text] {
+input[type=text],
+input[type=number] {
     padding: .25em .5em;
     border: 1px solid #888;
 }
 
 input[type=submit],
 input[type=button],
-button {
+button,
+a.btn {
     padding: .25em .5em;
     color: #333;
     background-color: #eee;
     border: 1px solid #333;
+    text-decoration: none;
+    display: inline-block;
     cursor: pointer;
 }
 
@@ -327,6 +327,32 @@ footer a {
 }
 
 
+.form-row {
+    margin-bottom: 1em;
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+}
+
+.form-label {
+    margin-right: .5em;
+    font-weight: 700;
+    text-align: right;
+    flex: 0 0 125px;
+}
+
+.form-field {
+    flex: 1 1 auto;
+}
+
+.form-field input[type=text],
+.form-field input[type=number] {
+    width: 100%;
+    max-width: 300px;
+    margin-right: 0;
+}
+
+
 
 @media only screen and (max-width: 960px) {
     #chat-roll {
@@ -441,7 +467,9 @@ footer a {
         width: 75%;
     }
     
-    label {
-        display: block;
+    .form-label {
+        margin: 0;
+        text-align: left;
+        flex-basis: 100%;
     }
 }

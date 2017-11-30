@@ -5,31 +5,35 @@
     <%_ if(ship._id) { -%>
     <input type="hidden" name="_id" value="<%= ship._id %>">
     <%_ } -%>
-    <p>
-        <label>Registreringsnummer:</label>
-        <input type="text" name="registry" value="<%= ship.registry || "" %>" required autofocus>
-    </p>
-    <p>
-        <label>Namn:</label>
-        <input type="text" name="name" value="<%= ship.name || "" %>" required>
-    </p>
-    <p>
-        <label>Klass:</label>
-        <input type="text" name="class" value="<%= ship["class"] || "" %>" required>
-    </p>
-    <p>
-        <label>Första tjänsteår:</label>
-        <input type="number" name="commissioned" value="<%= (ship.commissioned !== null ? ship.commissioned : "") %>" required>
-    </p>
-    <p>
-        <label>Sista tjänsteår:</label>
-        <input type="number" name="decommissioned" value="<%= (ship.decommissioned !== null ? ship.decommissioned : "") %>">
-    </p>
-    <p>
-        <label><input type="checkbox" name="destroyed"<%= (ship.destroyed ? " checked" : "") %>> Förstörd</label>
-    </p>
-    <p>
-        <input type="submit" value="<%= (ship._id ? "Uppdatera" : "Lägg till") %>">
-        <a class="btn" href="/ships">Avbryt</a>
-    </p>
+    <div class="form-row">
+        <div class="form-label"><label for="registry">Reg.nr:</label></div>
+        <div class="form-field"><input id="registry" type="text" name="registry" value="<%= ship.registry || "" %>" required autofocus></div>
+    </div>
+    <div class="form-row">
+        <div class="form-label"><label for="name">Namn:</label></div>
+        <div class="form-field"><input id="name" type="text" name="name" value="<%= ship.name || "" %>" required></div>
+    </div>
+    <div class="form-row">
+        <div class="form-label"><label for="class">Klass:</label></div>
+        <div class="form-field"><input id="class" type="text" name="class" value="<%= ship["class"] || "" %>" required></div>
+    </div>
+    <div class="form-row">
+        <div class="form-label"><label for="commissioned">Första tjänsteår:</label></div>
+        <div class="form-field"><input id="commissioned" type="number" name="commissioned" value="<%= (ship.commissioned !== null ? ship.commissioned : "") %>" required></div>
+    </div>
+    <div class="form-row">
+        <div class="form-label"><label for="decommissioned">Sista tjänsteår:</label></div>
+        <div class="form-field"><input id="decommissioned" type="number" name="decommissioned" value="<%= (ship.decommissioned !== null ? ship.decommissioned : "") %>"></div>
+    </div>
+    <div class="form-row">
+        <div class="form-label"><label for="destroyed">Förstörd:</label></div>
+        <div class="form-field"><input id="destroyed" type="checkbox" name="destroyed"<%= (ship.destroyed ? " checked" : "") %>></div>
+    </div>
+    <div class="form-row">
+        <div class="form-label"></div>
+        <div class="form-field">
+            <input type="submit" value="<%= (ship._id ? "Uppdatera" : "Lägg till") %>">
+            <a class="btn" href="/ships">Avbryt</a>
+        </div>
+    </div>
 </form>

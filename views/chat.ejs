@@ -1,16 +1,22 @@
 <h1>Chatt</h1>
 <p>Testa chattservern här!</p>
+<br>
 <form id="connect-form">
-    <p>
-        <label>Smeknamn:</label>
-        <input type="text" name="nick" maxlength="20" required autofocus>
-    </p>
-    <p>
-        <label>Server:</label>
-        <input type="text" name="url" value="ws://" required>
-    </p>
-    <input type="submit" name="connect" value="Anslut">
-    <input type="button" name="disconnect" value="Koppla från" disabled>
+    <div class="form-row">
+        <div class="form-label"><label for="nick">Smeknamn:</label></div>
+        <div class="form-field"><input id="nick" type="text" name="nick" maxlength="20" required autofocus></div>
+    </div>
+    <div class="form-row">
+        <div class="form-label"><label for="url">Server:</label></div>
+        <div class="form-field"><input id="url" type="text" name="url" value="ws://" required></div>
+    </div>
+    <div class="form-row">
+        <div class="form-label"></div>
+        <div class="form-field">
+            <input type="submit" name="connect" value="Anslut">
+            <input type="button" name="disconnect" value="Koppla från" disabled>
+        </div>
+    </div>
 </form>
 <div id="chat-container" style="display: none">
     <div id="chat-roll"></div>
