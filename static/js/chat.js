@@ -163,6 +163,7 @@
     }
     
     
+    connectForm.url.value = "ws://" + doc.location.host;
     connectForm.addEventListener("submit", connect);
     connectForm.disconnect.addEventListener("click", function() {
         if (ws) {
