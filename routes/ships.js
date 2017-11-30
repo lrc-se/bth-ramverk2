@@ -70,20 +70,20 @@ function getValidationErrors(ship) {
 /**
  * Ship list.
  */
-router.get("/", function(req, res) {
+router.get("/", function(req, res, next) {
     repository("ships").then(function(shipRepo) {
         shipRepo.retrieve({}, true).then(function(ships) {
             util.renderLayout(req, res, "ships/index", "Stjärnkryssare", { ships });
             shipRepo.connection.close();
         });
-    });
+    }).catch(next);
 });
 
 
 /**
  * Create ship.
  */
-router.all("/create", function(req, res) {
+router.all("/create", function(req, res, next) {
     let errors = [];
     let ship = {};
     if (req.method == "POST") {
@@ -95,7 +95,7 @@ router.all("/create", function(req, res) {
                     res.redirect("/ships");
                     shipRepo.connection.close();
                 });
-            });
+            }).catch(next);
             return;
         }
     }
@@ -107,7 +107,7 @@ router.all("/create", function(req, res) {
 /**
  * Edit ship.
  */
-router.all("/edit/:id", function(req, res) {
+router.all("/edit/:id", function(req, res, next) {
     let errors = [];
     let ship = {};
     repository("ships").then(function(shipRepo) {
@@ -132,19 +132,21 @@ router.all("/edit/:id", function(req, res) {
                     ship
                 });
             } else {
-                res.redirect("/ships");
+                util.renderLayout(req, res, "ships/404", "Kunde inte hitta stjärnkryssaren", { 
+                    id: req.params.id
+                });
             }
             
             shipRepo.connection.close();
         });
-    });
+    }).catch(next);
 });
 
 
 /**
  * Delete ship.
  */
-router.all("/delete/:id", function(req, res) {
+router.all("/delete/:id", function(req, res, next) {
     repository("ships").then(function(shipRepo) {
         shipRepo.find(null, req.params.id).then(function(ship) {
             if (ship) {
@@ -158,19 +160,21 @@ router.all("/delete/:id", function(req, res) {
                 
                 util.renderLayout(req, res, "ships/delete", "Ta bort stjärnkryssare", { ship });
             } else {
-                res.redirect("/ships");
+                util.renderLayout(req, res, "ships/404", "Kunde inte hitta stjärnkryssaren", { 
+                    id: req.params.id
+                });
             }
             
             shipRepo.connection.close();
         });
-    });
+    }).catch(next);
 });
 
 
 /**
  * Reset ship database.
  */
-router.all("/reset", function(req, res) {
+router.all("/reset", function(req, res, next) {
     if (req.method == "POST" && req.body.action == "reset") {
         repository("ships").then(function(shipRepo) {
             shipRepo.collection.deleteMany().then(function() {
@@ -185,7 +189,7 @@ router.all("/reset", function(req, res) {
                 res.redirect("/ships");
                 shipRepo.connection.close();
             });
-        });
+        }).catch(next);
         return;
     }
     
