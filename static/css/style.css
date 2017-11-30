@@ -34,8 +34,7 @@ a:visited {
 
 p,
 ul,
-ol,
-table {
+ol {
     margin: 0 0 1em;
 }
 
@@ -350,6 +349,40 @@ footer a {
     width: 100%;
     max-width: 300px;
     margin-right: 0;
+}
+
+.x-scroll {
+    overflow-x: auto;
+}
+
+table {
+    width: 100%;
+    max-width: 800px;
+    border: 1px solid rgba(0, 0, 0, .15);
+    border-spacing: 0;
+    font-size: .9em;
+}
+
+th,
+td {
+    padding: .5em .75em;
+    border-bottom: 1px solid rgba(0, 0, 0, .15);
+    vertical-align: top;
+}
+
+th {
+    color: #fff;
+    background-color: #000;
+    font-weight: 700;
+    text-align: left;
+}
+
+tr:nth-child(even) {
+    background-color: #eee;
+}
+
+tr:last-child td {
+    border-bottom: none;
 }
 
 

@@ -3,11 +3,12 @@
     <a class="btn" href="/ships/create">Lägg till</a>
     <a class="btn" href="/ships/reset">Återställ databas</a>
 </p>
+<br>
 <% if(ships.length) { -%>
 <p>Visar <strong><%= ships.length %></strong> stjärn&shy;kryssare</p>
 <div class="x-scroll">
     <table>
-        <tr><th>Reg.nr</th><th>Namn</th><th>Klass</th><th>I tjänst</th><th>Förstörd</th><th>Åtgärd</th></tr>
+        <tr><th>Reg.nr</th><th>Namn</th><th>Klass</th><th>I&nbsp;tjänst</th><th>Förstörd</th><th>Åtgärd</th></tr>
         <%_ for(var ship of ships) { -%>
         <tr>
             <td><%= ship.registry %></td>
