@@ -75,6 +75,9 @@ router.get("/", function(req, res, next) {
         shipRepo.retrieve({}, true).then(function(ships) {
             util.renderLayout(req, res, "ships/index", "Stjärnkryssare", { ships });
             shipRepo.connection.close();
+        }).catch(function(err) {
+            shipRepo.connection.close();
+            next(err);
         });
     }).catch(next);
 });
@@ -94,6 +97,9 @@ router.all("/create", function(req, res, next) {
                 shipRepo.save(ship).then(function() {
                     res.redirect("/ships");
                     shipRepo.connection.close();
+                }).catch(function(err) {
+                    shipRepo.connection.close();
+                    next(err);
                 });
             }).catch(next);
             return;
@@ -120,6 +126,9 @@ router.all("/edit/:id", function(req, res, next) {
                         shipRepo.save(ship).then(function() {
                             res.redirect("/ships");
                             shipRepo.connection.close();
+                        }).catch(function(err) {
+                            shipRepo.connection.close();
+                            next(err);
                         });
                         return;
                     }
@@ -138,6 +147,9 @@ router.all("/edit/:id", function(req, res, next) {
             }
             
             shipRepo.connection.close();
+        }).catch(function(err) {
+            shipRepo.connection.close();
+            next(err);
         });
     }).catch(next);
 });
@@ -154,6 +166,9 @@ router.all("/delete/:id", function(req, res, next) {
                     shipRepo.remove(ship).then(function() {
                         shipRepo.connection.close();
                         res.redirect("/ships");
+                    }).catch(function(err) {
+                        shipRepo.connection.close();
+                        next(err);
                     });
                     return;
                 }
@@ -166,6 +181,9 @@ router.all("/delete/:id", function(req, res, next) {
             }
             
             shipRepo.connection.close();
+        }).catch(function(err) {
+            shipRepo.connection.close();
+            next(err);
         });
     }).catch(next);
 });
@@ -192,6 +210,9 @@ router.all("/reset", function(req, res, next) {
                     }).then(function() {
                         res.redirect("/ships");
                         shipRepo.connection.close();
+                    }).catch(function(err) {
+                        shipRepo.connection.close();
+                        next(err);
                     });
                 }).catch(next);
             }
