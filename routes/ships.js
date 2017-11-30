@@ -176,20 +176,26 @@ router.all("/delete/:id", function(req, res, next) {
  */
 router.all("/reset", function(req, res, next) {
     if (req.method == "POST" && req.body.action == "reset") {
-        repository("ships").then(function(shipRepo) {
-            shipRepo.collection.deleteMany().then(function() {
-                let ships = JSON.parse(
-                    require("fs").readFileSync(
-                        require("path").resolve(__dirname, "ships.json"),
-                        "utf8"
-                    )
-                );
-                return shipRepo.collection.insertMany(ships);
-            }).then(function() {
-                res.redirect("/ships");
-                shipRepo.connection.close();
-            });
-        }).catch(next);
+        require("fs").readFile(
+            require("path").resolve(__dirname, "ships.json"),
+            "utf8",
+            function(err, data) {
+                if (err) {
+                    next(err);
+                    return;
+                }
+                
+                let ships = JSON.parse(data);
+                repository("ships").then(function(shipRepo) {
+                    shipRepo.collection.deleteMany().then(function() {
+                        return shipRepo.collection.insertMany(ships);
+                    }).then(function() {
+                        res.redirect("/ships");
+                        shipRepo.connection.close();
+                    });
+                }).catch(next);
+            }
+        );
         return;
     }
     
