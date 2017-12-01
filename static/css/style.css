@@ -368,6 +368,29 @@ footer a {
     margin-right: 0;
 }
 
+.msg {
+    margin-bottom: 2em;
+}
+
+.msg > div {
+    padding: .5em .75em;
+    color: #005;
+    background-image: linear-gradient(#dde, #f8f8ff);
+    border: 2px solid #005;
+    display: inline-block;
+}
+
+.msg.err > div {
+    color: #500;
+    background-image: linear-gradient(#edd, #fff8f8);
+    border-color: #500;
+}
+
+.msg p,
+.msg ul {
+    margin-bottom: .5em;
+}
+
 .x-scroll {
     overflow-x: auto;
 }

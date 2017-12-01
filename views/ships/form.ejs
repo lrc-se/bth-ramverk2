@@ -1,5 +1,14 @@
 <% if(errors.length) { -%>
-<%= errors.join(" ") %>
+<div class="msg err">
+    <div>
+        <p><strong>Fel:</strong></p>
+        <ul>
+        <%_ for(var error of errors) { -%>
+            <li><%= error %></li>
+        <%_ } -%>
+        </ul>
+    </div>
+</div>
 <% } -%>
 <form action="<%= action %>" method="post">
     <%_ if(ship._id) { -%>
