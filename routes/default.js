@@ -5,7 +5,7 @@
 "use strict";
 
 const express = require("express");
-const util = require("../app/util");
+const defaultController = require("../controllers/default");
 
 
 var router = express.Router();
@@ -14,41 +14,31 @@ var router = express.Router();
 /**
  * Index page.
  */
-router.get("/", function(req, res) {
-    util.renderLayout(req, res, "index", "Kalles sida", { age: util.getAge() });
-});
+router.get("/", defaultController.index);
 
 
 /**
  * About page.
  */
-router.get("/about", function(req, res) {
-    util.renderLayout(req, res, "about", "Om webbplatsen");
-});
+router.get("/about", defaultController.about);
 
 
 /**
  * Report page.
  */
-router.get("/report", function(req, res) {
-    util.renderLayout(req, res, "report", "Redovisningar");
-});
+router.get("/report", defaultController.report);
 
 
 /**
  * Application page.
  */
-router.get("/app", function(req, res) {
-    util.renderLayout(req, res, "app", "Applikation");
-});
+router.get("/app", defaultController.app);
 
 
 /**
  * Chat page.
  */
-router.get("/chat", function(req, res) {
-    util.renderLayout(req, res, "chat", "Chatt");
-});
+router.get("/chat", defaultController.chat);
 
 
 module.exports = router;
