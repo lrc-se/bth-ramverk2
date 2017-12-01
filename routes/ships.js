@@ -78,13 +78,16 @@ router.get("/", function(req, res, next) {
         sort = req.query.sort;
         desc = +req.query.desc || 0;
     }
+    let query = (req.query.active == 1 ? { destroyed: false } : {});
     
     repository("ships").then(function(shipRepo) {
-        shipRepo.retrieve().sort(sort, (desc ? -1 : 1)).toArray().then(function(ships) {
+        let cursor = shipRepo.retrieve(query).sort(sort, (desc ? -1 : 1));
+        cursor.toArray().then(function(ships) {
             util.renderLayout(req, res, "ships/index", "Stjärnkryssare", {
                 ships,
                 sort,
-                desc
+                desc,
+                active: +req.query.active || 0
             });
             shipRepo.connection.close();
         }).catch(function(err) {

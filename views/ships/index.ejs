@@ -1,5 +1,9 @@
 <%
 
+var sortQS = function(field) {
+    return `?sort=${field}&amp;desc=` + (sort ? +!desc : 0) + `&amp;active=${active}`;
+};
+
 var sortArrow = function(field) {
     if (field !== sort) {
         return "";
@@ -16,14 +20,19 @@ var sortArrow = function(field) {
 <br>
 <% if(ships.length) { -%>
 <p>Visar <strong><%= ships.length %></strong> stjärn&shy;kryssare</p>
+<form action="" method="get">
+    <input type="hidden" name="sort" value="<%= sort %>">
+    <input type="hidden" name="desc" value="<%= (sort ? desc : 0) %>">
+    <p><em><label><input type="checkbox" name="active" value="1"<%= (active == 1 ? " checked" : "") %> onchange="this.form.submit()"> Dölj förstörda</label></em></p>
+</form>
 <div class="x-scroll">
     <table>
         <tr>
-            <th><a href="?sort=registry&amp;desc=<%= +!desc %>">Reg.nr</a><%- sortArrow("registry") %></th>
-            <th><a href="?sort=name&amp;desc=<%= +!desc %>">Namn</a><%- sortArrow("name") %></th>
-            <th><a href="?sort=class&amp;desc=<%= +!desc %>">Klass</a><%- sortArrow("class") %></th>
-            <th><a href="?sort=commissioned&amp;desc=<%= +!desc %>">I&nbsp;tjänst</a><%- sortArrow("commissioned") %></th>
-            <th><a href="?sort=destroyed&amp;desc=<%= +!desc %>">Förstörd</a><%- sortArrow("destroyed") %></th>
+            <th><a href="<%- sortQS("registry") %>">Reg.nr</a><%- sortArrow("registry") %></th>
+            <th><a href="<%- sortQS("name") %>">Namn</a><%- sortArrow("name") %></th>
+            <th><a href="<%- sortQS("class") %>">Klass</a><%- sortArrow("class") %></th>
+            <th><a href="<%- sortQS("commissioned") %>">I&nbsp;tjänst</a><%- sortArrow("commissioned") %></th>
+            <th><a href="<%- sortQS("destroyed") %>">Förstörd</a><%- sortArrow("destroyed") %></th>
             <th>Åtgärd</th>
         </tr>
         <%_ for(var ship of ships) { -%>
