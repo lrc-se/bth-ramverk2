@@ -19,7 +19,7 @@ var api = {};
  * @param   {object}    [data]  Template data.
  */
 api.renderLayout = function(req, res, view, title, data) {
-    res.render("layout", {
+    res.render("default/layout", {
         req: req,
         view: view,
         title: title || "",
