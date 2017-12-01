@@ -1,3 +1,13 @@
+<%
+
+var sortArrow = function(field) {
+    if (field !== sort) {
+        return "";
+    }
+    return "&nbsp;&" + (desc ? "d" : "u") + "arr;";
+};
+
+-%>
 <h1>Stjärn&shy;kryssare</h1>
 <p>
     <a class="btn" href="/ships/create">Lägg till</a>
@@ -8,7 +18,14 @@
 <p>Visar <strong><%= ships.length %></strong> stjärn&shy;kryssare</p>
 <div class="x-scroll">
     <table>
-        <tr><th>Reg.nr</th><th>Namn</th><th>Klass</th><th>I&nbsp;tjänst</th><th>Förstörd</th><th>Åtgärd</th></tr>
+        <tr>
+            <th><a href="?sort=registry&amp;desc=<%= +!desc %>">Reg.nr</a><%- sortArrow("registry") %></th>
+            <th><a href="?sort=name&amp;desc=<%= +!desc %>">Namn</a><%- sortArrow("name") %></th>
+            <th><a href="?sort=class&amp;desc=<%= +!desc %>">Klass</a><%- sortArrow("class") %></th>
+            <th><a href="?sort=commissioned&amp;desc=<%= +!desc %>">I&nbsp;tjänst</a><%- sortArrow("commissioned") %></th>
+            <th><a href="?sort=destroyed&amp;desc=<%= +!desc %>">Förstörd</a><%- sortArrow("destroyed") %></th>
+            <th>Åtgärd</th>
+        </tr>
         <%_ for(var ship of ships) { -%>
         <tr>
             <td><%= ship.registry %></td>
@@ -24,6 +41,7 @@
         <%_ } -%>
     </table>
 </div>
+<br>
 <% } else { -%>
 <p><em>Inga stjärn&shy;kryssare att visa</em></p>
 <% } -%>

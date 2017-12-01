@@ -71,9 +71,21 @@ function getValidationErrors(ship) {
  * Ship list.
  */
 router.get("/", function(req, res, next) {
+    let sorts = ["registry", "name", "class", "commissioned", "destroyed"];
+    let sort = null;
+    let desc = 1;
+    if (~sorts.indexOf(req.query.sort)) {
+        sort = req.query.sort;
+        desc = +req.query.desc || 0;
+    }
+    
     repository("ships").then(function(shipRepo) {
-        shipRepo.retrieve({}, true).then(function(ships) {
-            util.renderLayout(req, res, "ships/index", "Stjärnkryssare", { ships });
+        shipRepo.retrieve().sort(sort, (desc ? -1 : 1)).toArray().then(function(ships) {
+            util.renderLayout(req, res, "ships/index", "Stjärnkryssare", {
+                ships,
+                sort,
+                desc
+            });
             shipRepo.connection.close();
         }).catch(function(err) {
             shipRepo.connection.close();

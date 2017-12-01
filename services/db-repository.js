@@ -58,10 +58,11 @@ const repoProto = {
     /**
      * Retrieves all documents that match a query.
      *
-     * @param   {object}    [query]     Query object.
-     * @param   {boolean}   [fetch]     Whether to fetch the results into memory.
+     * @param   {object}    [query]         Query object.
+     * @param   {boolean}   [fetch]         Whether to fetch the results into memory.
      *
-     * @returns {Promise}               Promise with cursor or array of fetched documents as value.
+     * @returns {mongodb.Cursor|Promise}    Cursor object or Promise with array of fetched 
+     *                                      documents as value.
      */
     retrieve: function retrieve(query, fetch) {
         let cursor = this.collection.find(query);
