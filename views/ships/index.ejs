@@ -40,7 +40,7 @@ var sortArrow = function(field) {
             <td><%= ship.registry %></td>
             <td><%= ship.name %></td>
             <td><%= ship["class"] %></td>
-            <td><%= ship.commissioned %>–<%= ship.decommissioned || "" %></td>
+            <td><%= ship.commissioned %>–<%= (ship.decommissioned !== null ? ship.decommissioned : "") %></td>
             <td><%= (ship.destroyed ? "Ja" : "Nej") %></td>
             <td>
                 <a href="/ships/edit/<%= ship._id %>">Redigera</a><br>
