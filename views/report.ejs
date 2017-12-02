@@ -347,7 +347,92 @@
 </section>
 <section id="kmom05">
     <h2>Kmom05</h2>
-    <p>blubb</p>
+    <p>
+        Jag började med att skriva en MongoDB-inriktad variant av en <i>Repository</i>-modul även här, vilken jag snart delade upp i två moduler: 
+        en som hanterar (och cachar undan) själva uppkopplingen och en som representerar en samling (<i>collection</i>) och erbjuder enkla CRUD-funktioner mot denna. 
+        Upplägget påminner därmed om den första versionen av min <a href="https://packagist.org/packages/lrc-se/anax-repository"><i>Repository</i>-komponent</a> i <b>ramverk1</b>, 
+        men är här något enklare och fungerar på ett lite annorlunda sätt (även bortsett från de asynkrona bitarna), då det man får ut från MongoDB-drivrutinen 
+        skiljer sig en del från hur PDO fungerar.
+    </p>
+    <p>
+        Till databasen valde jag att ta tillbaka stjärn&shy;kryssarna från den <a href="http://www.student.bth.se/~kabc16/dbwebb-kurser/htmlphp/me//kmom06/me6/search.php">första kursen</a>. 
+        Kodstrukturen för frontend&shy;kopplingen är snarlik den jag använt i ett antal senare kurser, med partiella vyer och hjälp&shy;funktioner som tolkar och validerar indata, 
+        med den uppenbara skillnaden att själva databas&shy;operationerna nu använder asynkrona anrop. 
+        Den knivigaste pucken att lösa där var att se till så att anslutningen alltid stängs när HTTP-svaret skickats samt att få till en vettig felhantering. 
+        Använd funktionen "Återställ databas" för att läsa in datan från fil, då själva databasen inte ingår i repot.
+    </p>
+    <p>
+        Här skall också nämnas att jag av kompatibilitets&shy;skäl behövt använda <code>Promise</code>-struktur på koden, 
+        vilket inte blir lika "snyggt" som <code>async</code>/<wbr><code>await</code>, men å andra sidan är det inte heller fel att träna på den underliggande tekniken som sådan – 
+        särskilt inte om man inte kan vara säker på att målmiljön verkligen stöder de senare konstruktionerna. Jag har gjort vad jag har kunnat för att hålla koden så rak och tydlig som möjligt ändå, 
+        men det blir några upprepningar och nästlade strukturer på sina håll.
+    </p>
+    <p>
+        "Integrationen" i applikationen består liksom i det förra momentet endast av att modulerna kopierats över; det är ännu för tidigt att avgöra exakt hur de skall användas, 
+        så det kändes inte vara så stor mening med att implementera något tillfälligt bara för sakens skull. Det finns heller inga test för databas&shy;delarna, 
+        varken i redovisa-repot eller i applikationen, helt enkelt därför att jag inte orkade/hann antingen mocka MongoDB eller sätta upp en fungerande testdatabas att kommunicera mot – 
+        särskilt inte på ett sätt som garanterat fungerar även med de externa tjänsterna.
+    </p>
+    <p>
+        Slutligen har jag uppdaterat kodbasen till att använda MVC-struktur fullt ut samt ändrat en del i den övriga katalog&shy;strukturen när jag ändå höll på, 
+        så att det skall bli lite lättare att hitta saker och ting nu när projektet har växt. Observera även att databasdelen inte fungerar på studentservern, 
+        eftersom denna inte har stöd för MongoDB – vilket dock visar att tidigare omnämnda felhantering fungerar som den skall.
+    </p>
+    <h5>Hur gick det att komma igång med databasen MongoDB?</h5>
+    <p>
+        Det tog sin lilla tid detta, då arbetssättet skiljer sig markant från de tekniker jag utsatts för hittills, 
+        både inom den akademiska världen, i arbetslivet samt privat – och då inkluderar jag både RDBMS och tidigare NoSQL-erfarenheter. 
+        Man får helt enkelt lära sig att tänka annorlunda, men när man väl kommit över en viss tröskel så flyter det på.
+    </p>
+    <p>
+        Rent tekniskt kör jag MongoDB i en alpine-behållare i förgrunden på min Debian-VM, eftersom det som tidigare nämnts bara är där som Docker fungerar, 
+        och utvecklar Express-servern på huvud&shy;systemet. På detta sätt kan jag använda min normala utvecklings&shy;miljö 
+        för själva kod&shy;knackandet och samtidigt enkelt hålla koll på logg&shy;utskrifter från databas&shy;motorn.
+    </p>
+    <h5>
+        Vilken syn har du på databaser inom konceptet NoSQL?<br>
+        Reflektera över skillnader och likheter mellan relations&shy;databaser och databaser inom NoSQL.
+    </h5>
+    <p>
+        Jag ser absolut nyttan och attraktionen hos dem, särskilt när det kommer till möjligheterna att frigöra sig från rigida databas&shy;scheman, 
+        då det öppnar upp för ett mer dynamiskt användande än med en traditionell relations&shy;databas. 
+        Beroende på vad det är man vill lagra kan den fasta strukturen hos en tabell vara för begränsande, 
+        alternativt att man nödgas införa ett flertal kolumner som endast utnyttjas sporadiskt och för det mesta bara innehåller <code>NULL</code>, 
+        vilket dokument&shy;databaser som MongoDB löser på ett mycket enklare sätt.
+    </p>
+    <p>
+        Å andra sidan ställer BASE (kontra ACID) och frånvaron av <code>JOIN</code>-operationer helt andra krav på applikationen, 
+        där man ibland får göra en massa "kringgående rörelser" för att hantera sådant som är inbyggt även i det enklaste RDBMS. 
+        Ett vanligt återkommande problem är att det kan vara svårt att avgöra om den information man får ut verkligen är aktuell, 
+        samt att säkerställa att den information man skriver tillbaka verkligen lagras och i sin tur blir aktuell för andra läsoperationer.
+    </p>
+    <p>
+        NoSQL-databaser är också enklare att implementera i distribuerad form, med flera kommunicerande noder i ett nätverk, vilket gör dem mer skalbara än motsvarande relations&shy;databaser. 
+        Detta är naturligtvis mycket användbart i dagens omgivning med allt mer molnbaserade tjänster och <i>big data</i>, 
+        men det man offrar är alltså ofta de garantier som ACID medför liksom styrkan i relations&shy;inriktad SQL.
+    </p>
+    <p>
+        Slutsatsen blir densamma som alltid: allt har fördelar och nackdelar och man bör välja den teknik som passar bäst för det syfte man vill uppnå, i det sammanhang det skall uppnås.
+    </p>
+    <h5>Vilka är dina tankar om asynkron programmering med JavaScript?</h5>
+    <p>
+        Någon form av hatkärlek, tror jag. Det asynkrona och händelse&shy;baserade upplägget är ju som sagt en del av språkets grundvalar, 
+        så det är inte direkt så att man kommer undan det, men när det kommer till t.ex. databas&shy;operationer som här, vilka i andra sammanhang (såsom dem vi stött på hittills) 
+        varit rent sekventiella, blir skillnaderna mycket tydligare. I mångt och mycket är det en vanesak, vilket det även är att ställa om från <i>callback</i>-baserade 
+        API:er till <code>Promise</code>-baserade diton, eller <code>async</code>/<wbr><code>await</code> nu senast då.
+    </p>
+    <p>
+        Flera olika sätt att göra samma sak, helt enkelt, för själva upplägget som sådant är ju inget nytt för en gammal JS-räv – 
+        även om man fortfarande snubblar över vissa saker till och från när någon form av ordning behöver upprätthållas.
+    </p>
+    <h5>Hur känner du för Docker och det sättet vi jobbar med tjänster i behållare?</h5>
+    <p>
+        Jag är väl inget jättefan. Visst kan det tyckas smidigt att bara kunna sparka igång självständiga saker kors och tvärs utan vidare, 
+        men tidigare invändningar om duplicering och resurs&shy;utnyttjande kvarstår – varför sätta upp ett godtyckligt antal <em>fullständiga miljöer</em> 
+        som endast skiljer sig åt i det <em>sista lagret</em> (applikationen)? Man binder sig även hårt till en specifik teknik, 
+        där det som vi sett är långtifrån säkert att den faktiskt fungerar i alla sammanhang där projektet ifråga kan tänkas behöva köras/<wbr>användas. 
+        Detta gäller särskilt ifråga om den tänkta målmiljön, där specifika begränsningar <em>och möjligheter</em> kan finnas – test och utveckling är en sak, produktions&shy;duglighet en annan.
+    </p>
 </section>
 <section id="kmom06">
     <h2>Kmom06</h2>
