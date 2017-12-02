@@ -33,11 +33,19 @@ A batch file is provided to facilitate restarting the server after this has happ
 
 The command `npm stop` will simply kill the errant Node processes, without restarting the server.
 
-__Run the server with different versions of Node using Docker:__
+__Run MongoDB using Docker:__
+
+`docker-compose up mongodb`
+
+This starts the MongoDB container in the foreground, allowing log messages to be seen, accepting connections on port 27017. 
+Use the environment variable `DBWEBB_DSN` to change the connection string the Express server uses to talk to the MongoDB instance.
 
 `docker-compose up -d`
 
-The server starts on ports 8101 (Node 4), 8102 (Node 8) and 8103 (Node 9). Stop the containers with `docker-compose down`.
+This starts both the Express server and the MongoDB server in separate containers in the background, using default configurations. 
+Stop all running containers with `docker-compose down`.
+
+The old containers with different versions of Node have been moved to the file *docker-compose-old.yml*.
 
 
 Test

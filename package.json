@@ -1,6 +1,6 @@
 {
   "name": "ramverk2",
-  "version": "4.0.0",
+  "version": "5.0.0",
   "description": "Base repo for ramverk2",
   "main": "index.js",
   "scripts": {

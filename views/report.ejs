@@ -355,15 +355,22 @@
         skiljer sig en del från hur PDO fungerar.
     </p>
     <p>
-        Till databasen valde jag att ta tillbaka stjärn&shy;kryssarna från den <a href="http://www.student.bth.se/~kabc16/dbwebb-kurser/htmlphp/me//kmom06/me6/search.php">första kursen</a>. 
+        Till databasen valde jag att ta tillbaka <a href="http://www.student.bth.se/~kabc16/dbwebb-kurser/htmlphp/me//kmom06/me6/search.php">stjärn&shy;kryssarna</a> från <b>htmlphp</b>. 
         Kodstrukturen för frontend&shy;kopplingen är snarlik den jag använt i ett antal senare kurser, med partiella vyer och hjälp&shy;funktioner som tolkar och validerar indata, 
         med den uppenbara skillnaden att själva databas&shy;operationerna nu använder asynkrona anrop. 
-        Den knivigaste pucken att lösa där var att se till så att anslutningen alltid stängs när HTTP-svaret skickats samt att få till en vettig felhantering. 
-        Använd funktionen "Återställ databas" för att läsa in datan från fil, då själva databasen inte ingår i repot.
+        Den knivigaste pucken att lösa där var att se till så att anslutningen alltid stängs när HTTP-svaret skickats, 
+        vilket jag inte ville lägga på operations&shy;nivå direkt i <code>db-repository</code> ifall man vill göra fler operationer efter varandra, 
+        samt att få till en vettig felhantering med hjälp av Express.
     </p>
     <p>
-        Här skall också nämnas att jag av kompatibilitets&shy;skäl behövt använda <code>Promise</code>-struktur på koden, 
-        vilket inte blir lika "snyggt" som <code>async</code>/<wbr><code>await</code>, men å andra sidan är det inte heller fel att träna på den underliggande tekniken som sådan – 
+        Det blev ingen sökfunktion den här gången, men däremot går det att filtrera <a href="/ships">listan</a> genom en kryssruta och sortera den genom att klicka på kolumn&shy;rubrikerna. 
+        Standard&shy;sorteringen är i lagrings&shy;ordning, men eftersom MongoDB:s automatiska ID:n är så långa har jag valt att inte skriva ut dem i tabellen 
+        (de visas dock vid redigering och radering). Det finns heller inga flash&shy;meddelanden eftersom servern (åtminstone så långt) saknar sessions&shy;komponent. 
+        Använd funktionen "Återställ databas" för att läsa om datan från fil, då själva databasen inte ingår i repot.
+    </p>
+    <p>
+        Här skall också nämnas att jag av kompatibilitets&shy;skäl behövt använda <code>.then()</code>-struktur på koden, 
+        vilket inte blir lika "snyggt" som <code>async</code>/<wbr><code>await</code>, men å andra sidan är det inte heller fel att träna på den underliggande <code>Promise</code>-tekniken som sådan – 
         särskilt inte om man inte kan vara säker på att målmiljön verkligen stöder de senare konstruktionerna. Jag har gjort vad jag har kunnat för att hålla koden så rak och tydlig som möjligt ändå, 
         men det blir några upprepningar och nästlade strukturer på sina håll.
     </p>
@@ -374,20 +381,22 @@
         särskilt inte på ett sätt som garanterat fungerar även med de externa tjänsterna.
     </p>
     <p>
-        Slutligen har jag uppdaterat kodbasen till att använda MVC-struktur fullt ut samt ändrat en del i den övriga katalog&shy;strukturen när jag ändå höll på, 
-        så att det skall bli lite lättare att hitta saker och ting nu när projektet har växt. Observera även att databasdelen inte fungerar på studentservern, 
-        eftersom denna inte har stöd för MongoDB – vilket dock visar att tidigare omnämnda felhantering fungerar som den skall.
+        Slutligen har jag uppdaterat me-sidans kodbas till att använda MVC-struktur fullt ut samt ändrat en del i den övriga katalog&shy;strukturen när jag ändå höll på, 
+        så att det skall bli lite lättare att hitta saker och ting nu när projektet har växt. Observera även att databasdelen inte fungerar på student&shy;servern, 
+        eftersom denna inte har stöd för MongoDB – vilket dock i sin tur illustrerar att tidigare omnämnda felhantering fungerar som den skall.
     </p>
     <h5>Hur gick det att komma igång med databasen MongoDB?</h5>
     <p>
         Det tog sin lilla tid detta, då arbetssättet skiljer sig markant från de tekniker jag utsatts för hittills, 
-        både inom den akademiska världen, i arbetslivet samt privat – och då inkluderar jag både RDBMS och tidigare NoSQL-erfarenheter. 
+        både inom den akademiska världen, i arbetslivet samt privat – och då inkluderar jag såväl RDBMS som tidigare NoSQL-erfarenheter. 
         Man får helt enkelt lära sig att tänka annorlunda, men när man väl kommit över en viss tröskel så flyter det på.
     </p>
     <p>
         Rent tekniskt kör jag MongoDB i en alpine-behållare i förgrunden på min Debian-VM, eftersom det som tidigare nämnts bara är där som Docker fungerar, 
         och utvecklar Express-servern på huvud&shy;systemet. På detta sätt kan jag använda min normala utvecklings&shy;miljö 
-        för själva kod&shy;knackandet och samtidigt enkelt hålla koll på logg&shy;utskrifter från databas&shy;motorn.
+        för själva kod&shy;knackandet och samtidigt enkelt hålla koll på logg&shy;utskrifter från databas&shy;motorn. 
+        För Express-behållaren såg jag ingen anledning att använda en egen <i>Dockerfile</i> över huvud taget, så den definieras direkt i <i>docker-compose.yml</i> som tidigare 
+        (behållarna från Kmom02 har nu flyttats till <i>docker-compose-old.yml</i>).
     </p>
     <h5>
         Vilken syn har du på databaser inom konceptet NoSQL?<br>
@@ -398,18 +407,24 @@
         då det öppnar upp för ett mer dynamiskt användande än med en traditionell relations&shy;databas. 
         Beroende på vad det är man vill lagra kan den fasta strukturen hos en tabell vara för begränsande, 
         alternativt att man nödgas införa ett flertal kolumner som endast utnyttjas sporadiskt och för det mesta bara innehåller <code>NULL</code>, 
-        vilket dokument&shy;databaser som MongoDB löser på ett mycket enklare sätt.
+        vilket t.ex. dokument&shy;databaser som MongoDB löser på ett mycket enklare sätt.
     </p>
     <p>
-        Å andra sidan ställer BASE (kontra ACID) och frånvaron av <code>JOIN</code>-operationer helt andra krav på applikationen, 
+        Å andra sidan ställer BASE (kontra ACID) och den utbredda frånvaron av <code>JOIN</code>-operationer helt andra krav på applikationen, 
         där man ibland får göra en massa "kringgående rörelser" för att hantera sådant som är inbyggt även i det enklaste RDBMS. 
         Ett vanligt återkommande problem är att det kan vara svårt att avgöra om den information man får ut verkligen är aktuell, 
-        samt att säkerställa att den information man skriver tillbaka verkligen lagras och i sin tur blir aktuell för andra läsoperationer.
+        samt att säkerställa att den information man skriver tillbaka verkligen lagras och i sin tur blir aktuell för andra läs&shy;operationer.
     </p>
     <p>
         NoSQL-databaser är också enklare att implementera i distribuerad form, med flera kommunicerande noder i ett nätverk, vilket gör dem mer skalbara än motsvarande relations&shy;databaser. 
         Detta är naturligtvis mycket användbart i dagens omgivning med allt mer molnbaserade tjänster och <i>big data</i>, 
-        men det man offrar är alltså ofta de garantier som ACID medför liksom styrkan i relations&shy;inriktad SQL.
+        men det man offrar är alltså ofta de garantier som ACID medför liksom styrkan i relations&shy;baserade datamodeller och de möjligheter som därtill hörande SQL erbjuder.
+    </p>
+    <p>
+        Alla tekniker under beaktning löser dock grund&shy;problemet i att lagra och tillgänglig&shy;göra relaterade data enligt godtyckliga uppdelningar, 
+        där det på en basal nivå mest bara är namnen på begreppen som skiljer – det är hur dessa uppdelningar hanteras i ett större perspektiv som ger varje typ sin särart. 
+        CRUD-operationer, selektion, projektion och sortering finns t.ex. i allmänhet att tillgå i en eller annan form oavsett motor, 
+        men de kan bete sig olika beroende på vad som finns under huven enligt ovan.
     </p>
     <p>
         Slutsatsen blir densamma som alltid: allt har fördelar och nackdelar och man bör välja den teknik som passar bäst för det syfte man vill uppnå, i det sammanhang det skall uppnås.
@@ -423,15 +438,16 @@
     </p>
     <p>
         Flera olika sätt att göra samma sak, helt enkelt, för själva upplägget som sådant är ju inget nytt för en gammal JS-räv – 
-        även om man fortfarande snubblar över vissa saker till och från när någon form av ordning behöver upprätthållas.
+        även om man fortfarande snubblar över vissa saker till och från när någon form av ordning (sekvens) behöver upprätthållas.
     </p>
     <h5>Hur känner du för Docker och det sättet vi jobbar med tjänster i behållare?</h5>
     <p>
         Jag är väl inget jättefan. Visst kan det tyckas smidigt att bara kunna sparka igång självständiga saker kors och tvärs utan vidare, 
         men tidigare invändningar om duplicering och resurs&shy;utnyttjande kvarstår – varför sätta upp ett godtyckligt antal <em>fullständiga miljöer</em> 
         som endast skiljer sig åt i det <em>sista lagret</em> (applikationen)? Man binder sig även hårt till en specifik teknik, 
-        där det som vi sett är långtifrån säkert att den faktiskt fungerar i alla sammanhang där projektet ifråga kan tänkas behöva köras/<wbr>användas. 
-        Detta gäller särskilt ifråga om den tänkta målmiljön, där specifika begränsningar <em>och möjligheter</em> kan finnas – test och utveckling är en sak, produktions&shy;duglighet en annan.
+        där det som vi sett är långtifrån säkert att den faktiskt fungerar i alla sammanhang där det aktuella projektet kan tänkas behöva köras/<wbr>användas. 
+        Detta gäller särskilt ifråga om den tänkta målmiljön, där specifika begränsningar <em>och möjligheter</em> kan finnas som man behöver förhålla sig till – 
+        test och utveckling är en sak, produktions&shy;duglighet en annan.
     </p>
 </section>
 <section id="kmom06">
