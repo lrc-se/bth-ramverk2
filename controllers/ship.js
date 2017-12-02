@@ -38,7 +38,7 @@ function populateShip(obj) {
 function getValidationErrors(ship) {
     let errors = [];
     if (!ship.registry) {
-        errors.push("Registreringsnummer måste anges.");
+        errors.push("Registrerings&shy;nummer måste anges.");
     }
     if (!ship.name) {
         errors.push("Namn måste anges.");
