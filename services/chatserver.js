@@ -6,7 +6,7 @@
 
 "use strict";
 
-const wsServer = require("./ws-server");
+const wsServer = require("ws-server");
 
 
 var server;
@@ -206,8 +206,7 @@ const ChatServer = {
      * @param   {boolean}       [config.log]      Whether to output log messages to console.
      */
     init: function(config) {
-        server = wsServer({
-            server: config.server,
+        server = wsServer({ server: config.server }, {
             timeout: (config.timeout !== undefined ? config.timeout : 30000),
             protocolHandler: handleProtocols,
             connectionHandler: handleConnection,
