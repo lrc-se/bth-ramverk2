@@ -14,7 +14,7 @@ Setup
 
 Before doing *anything* else, set up the environment:
 
-`npm install`
+    $ npm install
 
 
 Run
@@ -22,28 +22,37 @@ Run
 
 __Start the server:__
 
-`npm start`
+    $ npm start
 
-Set the environment variable `DBWEBB_PORT` to the port the server should listen on (defaults to 1337).
+*__NOTE:__ This command will only start the Express server, not the MongoDB instance (see below).*
+
+Set the environment variable `DBWEBB_PORT` to the port the server should listen on (defaults to 1337). 
+To see the resulting website in action, browse to the server's address including the aforementioned port (typically *http://localhost:1337*). 
 
 After stopping the server with Ctrl+C under Cygwin the Node process remains running in memory, blocking the chosen port. 
 A batch file is provided to facilitate restarting the server after this has happened:
 
-`./restart.bat`
+    $ ./restart.bat
 
-The command `npm stop` will simply kill the errant Node processes, without restarting the server.
+The command `npm stop` will simply kill the errant Node processes, without restarting the server (also Cygwin-only).
 
 __Run MongoDB using Docker:__
 
-`docker-compose up mongodb`
+    $ docker-compose up mongodb
 
-This starts the MongoDB container in the foreground, allowing log messages to be seen, accepting connections on port 27017. 
+This starts a MongoDB container in the foreground, allowing log messages to be seen, accepting connections on port 27017. 
 Use the environment variable `DBWEBB_DSN` to change the connection string the Express server uses to talk to the MongoDB instance.
 
-`docker-compose up -d`
+__Start the server with MongoDB using Docker:__
+
+    $ docker-compose up -d
+
+*or*
+
+    $ npm run start-docker
 
 This starts both the Express server and the MongoDB server in separate containers in the background, using default configurations. 
-Stop all running containers with `docker-compose down`.
+Stop all running containers with `docker-compose down` or `npm run stop-docker`.
 
 The old containers with different versions of Node have been moved to the file *docker-compose-old.yml*.
 
@@ -53,27 +62,25 @@ Test
 
 __Run linters:__
 
-`npm run lint`
+    $ npm run lint
 
 __Run unit tests:__
 
-`npm run tap`
+    $ npm run tap
 
-A code coverage report is saved in *build/coverage*.
+A code coverage report in HTML format is saved in *build/coverage*. To get a Clover report instead, run `npm run tap-clover`.
 
 __Run full test sequence:__
 
-`npm test`
+    $ npm test
 
 This includes both linters and unit tests.
 
 __Run test sequence with different versions of Node using Docker:__
 
-```
-npm run test1   # latest Node
-npm run test2   # Node 8
-npm run test3   # Node 4
-```
+    $ npm run test1     # latest Node
+    $ npm run test2     # Node 8
+    $ npm run test3     # Node 4
 
 
 ---
