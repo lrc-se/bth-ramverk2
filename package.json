@@ -6,6 +6,8 @@
   "scripts": {
     "start": "node index.js",
     "stop": "taskkill /f /im node.exe",
+    "start-docker": "docker-compose up -d",
+    "stop-docker": "docker-compose down",
     "test": "npm-run-all -c lint tap",
     "test1": "docker-compose -f docker-compose-test.yml run test1",
     "test2": "docker-compose -f docker-compose-test.yml run test2",
