@@ -1,6 +1,6 @@
 {
   "name": "ramverk2",
-  "version": "5.0.0",
+  "version": "6.0.0",
   "description": "Base repo for ramverk2",
   "main": "index.js",
   "scripts": {
@@ -20,6 +20,7 @@
     "ejslint": "ejslint views/**/*.ejs",
     "lint": "npm-run-all -c htmlhint stylelint eslint ejslint"
   },
+  "repository": "lrc-se/bth-ramverk2",
   "author": "LRC",
   "license": "",
   "devDependencies": {

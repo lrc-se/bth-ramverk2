@@ -6,7 +6,8 @@
 [![Scrutinizer Code Quality](https://scrutinizer-ci.com/g/lrc-se/bth-ramverk2/badges/quality-score.png?b=master)](https://scrutinizer-ci.com/g/lrc-se/bth-ramverk2/?branch=master)
 [![Scrutinizer Code Coverage](https://scrutinizer-ci.com/g/lrc-se/bth-ramverk2/badges/coverage.png?b=master)](https://scrutinizer-ci.com/g/lrc-se/bth-ramverk2/?branch=master)
 
-This is the base repo for the course *ramverk2* in BTH's web development programme, containing a simple [Express](http://expressjs.com/) server application.
+This is the base repo for the course *ramverk2* in BTH's web development programme, containing a simple [Express](http://expressjs.com/) 
+server application with Web Sockets and MongoDB implementations.
 
 
 Setup
@@ -41,7 +42,8 @@ __Run MongoDB using Docker:__
     $ docker-compose up mongodb
 
 This starts a MongoDB container in the foreground, allowing log messages to be seen, accepting connections on port 27017. 
-Use the environment variable `DBWEBB_DSN` to change the connection string the Express server uses to talk to the MongoDB instance.
+Use the environment variable `DBWEBB_DSN` to change the connection string the Express server uses to talk to the MongoDB instance 
+(defaults to `mongodb://localhost:27017/ramverk2`).
 
 __Start the server with MongoDB using Docker:__
 
@@ -51,7 +53,7 @@ __Start the server with MongoDB using Docker:__
 
     $ npm run start-docker
 
-This starts both the Express server and the MongoDB server in separate containers in the background, using default configurations. 
+This starts both the Express server and the MongoDB server in separate containers in the background, using the default configurations. 
 Stop all running containers with `docker-compose down` or `npm run stop-docker`.
 
 The old containers with different versions of Node have been moved to the file *docker-compose-old.yml*.
@@ -74,7 +76,7 @@ __Run full test sequence:__
 
     $ npm test
 
-This includes both linters and unit tests.
+This includes both linters and unit tests and will always run through all commands regardless of whether any of them fail along the way.
 
 __Run test sequence with different versions of Node using Docker:__
 

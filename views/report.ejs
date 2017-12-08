@@ -462,33 +462,33 @@
         När det gäller JavaScript specifikt så har situationen som bekant länge varit något prekär i detta avseende, särskilt på klientsidan, 
         vilket är anledningen till att system som CommonJS, webpack och gulp vuxit fram för att man skall slippa hålla reda på asynkron tajming själv vid normal inläsning av flera skriptfiler. 
         Det blir intressant att se vilket genomslag modulsystemet i ES6 får framöver, liksom om det någonsin kommer att bli <a href="https://caniuse.com/#feat=es6-module">allmänt gångbart</a> 
-        att göra motsvarande direkt i HTML.
+        att göra motsvarande direkt i HTML-koden.
     </p>
     <h5>Vill du ge dig på att förklara att just npm är den tjänst som växt snabbast av de modul&shy;kataloger som presenteras på webbplatsen “Module Counts”?</h5>
     <p>
-        Utöver ovanstående lär det ha att göra med Nodes starka frammarsch de senaste åren, vilket i sin tur kan ses som en del i en större trend – JavaScript är helt enkelt i ropet nu, 
-        när det gäller både klient, server och rent arbetsmarknads&shy;mässigt. På gott och ont, kan tyckas; vi har ju sett ett flertal artiklar som beklagat sig över den stora floran av JS-ramverk, 
-        där det ett tag tycktes dyka upp ett nytt varje vecka, men jag får också uppfattningen att saker och ting börjar stabilisera sig en del, 
-        om inte annat så i takt med att HTML5-API:er och ES6+ får allt större stöd ute i det vilda.
+        Utöver att utgöra en länge efterlängtad lösning på ovanstående lär det ha att göra med Nodes starka frammarsch de senaste åren, vilket i sin tur kan ses som en del i en större trend – 
+        JavaScript är helt enkelt i ropet nu, när det gäller både klient, server och rent arbets&shy;marknads&shy;mässigt. På gott och ont, kan tyckas; 
+        vi har ju t.ex. sett ett flertal artiklar som beklagat sig över den stora floran av JS-ramverk, där det ett tag tycktes dyka upp ett nytt varje vecka. 
+        Jag får dock också uppfattningen att saker och ting börjat stabilisera sig en del, om inte annat så i takt med att HTML5-API:er och ES6+ får allt större stöd ute i det fria.
     </p>
     <h5>Reflektera över hur arbetet gick att välja, separera, publicera och sedan åter integrera modulen i din applikation.</h5>
     <p>
         Det var egentligen inga problem alls. Jag hade redan i <a href="#kmom04">Kmom04</a> valt att bryta ut en allmän <i>Web Sockets</i>-server till en egen modul, 
         så jag tog helt enkelt den koden och lade i ett eget repo (i <i>me/module</i>). Sedan var det bara att ändra på några sökvägar och köra <code>npm link</code> 
-        så funkade allt direkt; därefter kunde jag enkelt skapa ett npm-konto och publicera samt installera modulen på riktigt. 
+        så funkade allt direkt – och därefter kunde jag enkelt skapa ett npm-konto och publicera samt installera modulen på riktigt. 
         Eftersom applikationen ännu inte är i närheten av att vara körbar har jag också installerat om den fristående modulen i me-sidan, 
-        så chatten här använder sig nu av en npm-installation istället för lokal kod i repot (som tagits bort i och med att den blev överflödig).
+        så <a href="/chat">chatten</a> här använder sig nu av en npm-installation istället för lokal kod i repot (som tagits bort i och med att den blev överflödig).
     </p>
     <p>
-        Själva <a href="https://www.npmjs.com/package/ws-server">modulen</a> är alltså mer eller mindre allmängiltig och är inte specifikt knuten till <a href="/chat">chattsystemet</a>, 
+        Själva <a href="https://www.npmjs.com/package/ws-server">modulen</a> är alltså mer eller mindre allmängiltig och är inte specifikt knuten till chatt&shy;systemet, 
         utan det sistnämnda använder sig av den förstnämnda för att hantera anslutningarna. Efter Kmom04 har jag filat lite mer på koden och API:et 
         och det känns som att det hela nog skulle vara användbart i allehanda sammanhang nu. Speciellt nöjd är jag med införandet av <code>client</code>-objektet i händelse&shy;hanterarna, 
         vilket underlättade byggandet av chattservern och förmodligen kommer att vara avgörande vid byggandet av applikationen. Se modulens dokumentation för mer information.
     </p>
     <p>
-        Om det är nånting som skall sägas så är det väl att man fick lov att klura ut allting själv med hjälp av npm-dokumentationen (som är delvis bristfällig) 
+        Om det är någonting som skall sägas så är det väl att man fick lov att klura ut allting själv med hjälp av npm-dokumentationen (som är delvis bristfällig) 
         ifråga om hela processen att skapa en ny publicerbar modul från noll, men det kanske också var tanken. Dessutom tog det en del tid att få till en bra testserie (100&nbsp;%, igen) 
-        samt att, inte minst, skriva en bra och heltäckande dokumentation (pust).
+        samt att – inte minst! – skriva en bra och heltäckande dokumentation (pust).
     </p>
     <h5>Sista uppgiften om att dokumentera och färdigställa redovisa-sidan – tog den mycket tid eller hade du allt klart?</h5>
     <p>
