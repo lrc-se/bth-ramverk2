@@ -5,11 +5,11 @@
     Tanken är att få till en modern version av detta med de tekniker som faller inom ramarna för den här kursen.
 </p>
 <p>
-    Detta upplägg medför behov av realtids&shy;uppdateringar, vilket kommer lösas med <i>Web Sockets</i>. I princip hela applikationen kommer att bygga på sådan kommunikation, 
+    Detta upplägg medför behov av realtids&shy;uppdateringar, vilket löses med <i>Web Sockets</i>. I princip hela applikationen bygger på sådan kommunikation, 
     åtminstone vad gäller själva spelflödet, där allt från chatt&shy;meddelanden till ritkommandon och speldirektiv skickas och mottas i båda riktningar över en öppen anslutning.
 </p>
 <p>
-    Eftersom det mesta är preliminärt än så länge är också implementations&shy;detaljerna oklara i det här skedet, men ungefär så här går tankarna för tillfället:
+    Se nedan för de ingående teknikvalen.
 </p>
 <h4>Server</h4>
 <ul>
@@ -23,14 +23,14 @@
 </p>
 <h4>Klient</h4>
 <ul>
-    <li>SPA-ramverk (kanske Vue?)</li>
+    <li>SPA-ramverk (Vue)</li>
     <li><i>Canvas</i>-baserad ritning</li>
     <li>chatt (även för gissningar)</li>
     <li>AJAX för databasåtkomst</li>
     <li><i>Web Sockets</i> för utväxling av grafik och meddelanden.</li>
 </ul>
 <p>
-    <em>Inget repo ännu</em>
+    <a href="https://github.com/lrc-se/bth-sg-client">Klienten på GitHub</a>
 </p>
 <h3>Modul</h3>
 <p>
