@@ -497,5 +497,139 @@
 </section>
 <section id="kmom10">
     <h2>Kmom10</h2>
-    <p>blubb</p>
+    <p>
+        Mitt val av <a href="/app">applikation</a> är alltså en onlinevariant av spelet <i>Skissa &amp; Gissa</i>, där deltagarna skall gissa på ord som de andra försöker rita, 
+        och utgör en vidare&shy;utveckling av den kodbas som påbörjats tidigare i kursen.
+    </p>
+    <p>
+        Jag hade rätt stora problem att få igång utvecklings&shy;miljön för klienten i början, men efter en del versions&shy;pillande och special&shy;lösningar 
+        började det rulla och jag kunde sätta igång och jobba. Därefter har det mesta flutit på bra, men det blev lite spännande när <code>npm</code> fick centrala problem alldeles i slutet, 
+        vilket dock löste sig snabbt.
+    </p>
+    <h5>Krav 1–3: Grunden</h5>
+    <p>
+        Applikationen består av två fristående repon – ett för servern och ett för klienten – och koden återfinns, förutom på GitHub, fortsatt i <i>me/app</i>. 
+        Se respektive readme-fil för vidare information.
+    </p>
+    <p>
+       Att notera: 
+    </p>
+    <ul>
+        <li>Docker används endast i serverdelen och är där inte heller strikt <em>nödvändigt</em>, men alla relaterade krav i uppgiften är uppfyllda.</li>
+        <li>
+            Serverdelen har god kodtäckning, där det främst är databasdelarna som inte är med, 
+            vilket i sin tur beror på att jag inte haft tid eller möjlighet att få till en fungerande miljö för test med MongoDB.
+        </li>
+        <li>
+            Klientdelen är av naturliga skäl klurigare att testa och jag hade också betydande problem med att sätta upp testmiljön där, men jag har gjort vad jag kunnat med den tid jag haft att tillgå. 
+            Om inte annat så får de testfall som ändå finns fungera som demonstration av hur man kan gå tillväga för att testa Vue-komponenter; 
+            sedan handlar det mest bara om att skriva koden.
+        </li>
+        <li>Jag använder samma CI-tjänster som tidigare – dels av vana och på grund av igen&shy;kännbarhets&shy;faktorn, men också för att jag helt enkelt tycker de är rätt bra.</li>
+        
+    </ul>
+    <h5>Krav 4: Readme</h5>
+    <p>
+        Jag har alltså två <i>README.md</i> – en i varje repo – och båda två innehåller detaljerade instruktioner om hur respektive applikation kan användas och modifieras, 
+        formaterade enligt konstens alla regler med generösa exempel. Tanken är att ge intresserade utvecklare en så god grund som möjligt att själva kunna skruva på saker och ting, 
+        för att få till en S&G-version som passar just dem med så lite ansträngning som möjligt. Eftersom det rör sig om två samverkande delar blir det en del upprepning mellan filerna, 
+        men tonvikten ligger på serverdelen.
+    </p>
+    <h5>Krav 5: Eget</h5>
+    <p>
+        Eftersom jag inte tyckte Docker-kravet var passande anför jag två alternativa åtaganden under denna rubrik:
+    </p>
+    <h6>Driftsättning</h6>
+    <p>
+        Då det hela rör sig om ett fler&shy;persons&shy;spel med (minst) en central kontrollerande server ville jag gärna få upp applikationen någonstans publikt, 
+        men begränsas av att inte ha tillgång till en egen server. Tyvärr är det också så att det är <em>betydligt</em> svårare att hitta en tjänst som erbjuder stöd för Node än för t.ex. PHP, 
+        särskilt på gratisnivå. De få som ändå finns har andra begränsningar, där t.ex. Heroku endast tillåter att man använder en (1) port som man dessutom inte kan välja själv.
+    </p>
+        Det är också långt ifrån säkert att man kan köra MongoDB på ett vettigt sätt (eller åtminstone inte lokalt på samma maskin), så jag satte upp en gratisdatabas på 
+        <a href="https://mlab.com/" target="_blank">mLab</a>, vilket gick väldigt smidigt och fungerade direkt med server&shy;applikationen genom att ändra miljövariabeln <code>SG_DSN</code> 
+        som avsett.
+    </p>
+    <p>
+        I slutändan fick jag förlita mig på studentservern även denna gång, vilket dock medförde ett annat problem: utgående anslutningar är spärrade, 
+        vilket gjorde att mLab-databasen inte gick att nå. Eftersom applikationen fungerar bra i övrigt och kan hantera en fallerad databas&shy;koppling utan problem fick detta dock vara hänt; 
+        kanske löser det sig vid ett senare tillfälle.
+    </p>
+    <p>
+        <a href="http://www.student.bth.se/~kabc16/dbwebb-kurser/ramverk2/me/app/client/dist/index.html">Spela S&G här!</a>
+    </p>
+    <h6>Kodstruktur</h6>
+    <p>
+        Jag övervägde ett tag ifall jag skulle slå ihop klient- och serverdelarna, men gjorde ett medvetet val att inte gå den vägen. 
+        Istället är nu respektive applikation helt fristående och kan köras hur och var som helst där de tekniska kraven är uppfyllda, 
+        vilket inte nödvändigtvis är fallet på samma ställe (klienten kräver endast en vanlig webbserver då den i sin kompilerade form är en självständig SPA).
+    </p>
+    <p>
+        Detta ligger väl i linje med hur själva koden är uppbyggd i båda delarna, där just självständighet och modularitet varit centrala designval – 
+        närhelst möjligt har lösa kopplingar valts framför starka och händelse&shy;lyssnare utnyttjas i stor utsträckning. 
+        Se avsnittet "Technical discussion" i respektive readme-fil för mer ingående information om uppläggen, men utöver det får själva källkoden som sådan utgöra redovisningen av denna punkt.
+    </p>
+    <h5>Krav 6: Ramverk</h5>
+    <p>
+        Jag har alltså valt <a href="https://vuejs.org/" target="_blank">Vue</a> som frontend&shy;ramverk, vilket har varit en mycket trevlig bekantskap. 
+        Det känns som ett slags mellanting mellan Angular och React, där man plockat russinen ur kakan från bägge håll men lämnat kvar mycket av det bagage man inte tyckt om – 
+        och därigenom skapat något som är bättre än dem båda. Kort sagt passar Vue mig riktigt fint bara jag kom in i tänket och jag kan <em>definitivt</em> rekommendera det!
+    </p>
+    <p>
+        En längre utläggning om Vue finns att tillgå <a href="https://github.com/lrc-se/bth-sg-client/blob/master/vue.md">i Markdown&shy;format</a> i klientrepot. 
+        Dokumentet är i grund och botten en beskrivande snabb&shy;introduktion till Vue-utveckling, med enkla kodexempel, men är skrivet med en positivt argumenterande ton.
+    </p>
+    <h5>Allmänt om projektet</h5>
+    <p>
+        Som tidigare nämnts hade jag redan innan gjort en Java-implementation av just Skissa & Gissa med direkt nätverks&shy;kommunikation 
+        och kunde tjuvkika en del på min egen kod från när det begav sig, men det blev en helt annan sak med de här teknikvalen – 
+        och för det allra mesta till det bättre.
+    </p>
+    <p>
+        Mer specifikt så känns kodstrukturen mycket bättre den här gången, vilket delvis (men inte helt) är ett resultat av uppbyggnaden hos de ingående ramverken/<wbr>verktygen
+        liksom hos JavaScript självt. Jag är särskilt nöjd med den uppnådda graden av modularitet och användandet av händelser, speciellt i klienten, 
+        som överlag känts rätt enkel och rättfram att utveckla (även om den tagit en del tid i anspråk i och med att Vue var nytt för mig).
+    </p>
+    <p>
+        Som väntat har även min <code>ws-server</code>-modul fungerar ypperligt och utgjort en omistlig del i server&shy;applikationen. 
+        Databas&shy;modulerna från Kmom05 har också fungerat bra, även om jag behövde uppdatera dem lite grann för att passa med version 3 av MongoDB-drivaren.
+    </p>
+    <p>
+        Vad gäller projektet som sådant så var det helt och hållet nödvändigt att det gick att påbörja långt i förväg, vilket inte varit fallet i de tidigare kurserna. 
+        Detta gjorde även att jag vågade ta steget att göra just Skissa & Gissa igen, då jag kommer ihåg hur pass omfattande det blev förra gången – 
+        och nu skulle det dessutom bli fråga om en hel radda nya tekniker att sätta sig in i. Med facit i hand gick det ändå bra, men det blev inte till att ligga på latsidan direkt – 
+        och som jag skriver i "Limitations"-avsnitten i readme-filerna finns det ett antal saker jag skulle velat ta tag i och förbättra om jag haft mer tid på mig.
+    </p>
+    <p>
+        Sammantaget blev det till slut ett bra projekt som knöt ihop kursens innehåll på ett bra sätt, men det var inte helt lätt att komma fram till projektidén – 
+        det är det som är faran när det sätts upp för vaga krav. Jag har sagt det förut och jag säger det igen: Är det meningen att projektet skall examinera studenternas 
+        <em>tekniska kunskap</em> och <em>problem&shy;lösnings&shy;förmåga</em>, eller deras <em>fantasi</em> och fallenhet för <em>spontan kreativitet</em>?
+    </p>
+    <h5>Kursutvärdering</h5>
+    <p>
+        Jag tycker inte riktigt att kursen har levt upp till sitt namn. Om man tittar på hur progressionen mellan kurserna sett ut tidigare år hade jag förväntat mig mer fokus på frontend här, 
+        särskilt i och med att vi haft så mycket backend i flera kurser innan, men även utöver det tycker jag inte det varit speciellt mycket fokus på just <em>ramverk</em>. 
+        Det är synd, särskilt eftersom det känns som att det föreligger ett missat tillfälle <em>från BTH:s sida</em> att dyka ner ordentligt i den moderna JS-frontend&shy;världen, 
+        som ju är väldigt spännande.
+    </p>
+    <p>
+        Överlag har kursen gett ett obestämt intryck, då instruktionerna i många fall varit allt annat än klara. "Gör så här, eller också något helt annat. Välj själv." 
+        Visst kan det låta bra med valfrihet, men frånvaron av styrning gör också att kursen känns allt mindre som just en <em>kurs</em> (i betydelsen <em>undervisning</em> eller <em>utbildning</em>) 
+        och mer som ett <em>fristående projekt&shy;arbete</em>. Var det verkligen meningen?
+    </p>
+    <p>
+        I värsta fall kan det ju faktiskt bli så att man inte lär sig speciellt mycket alls, om ens val – som alltså BTH här inte tar något ansvar för – visar sig mindre lämpliga, 
+        eller att man förlorar mycket tid och kraft på att upptäcka att man hamnat i en återvänds&shy;gränd. 
+        Eftersom man måste sköta allt frontend&shy;relaterat helt på egen hand är risken också stor att man missar mycket som annars kunde tagits upp där, 
+        med bättre styrning – eller åtminstone tips, förslag och exempel.
+    </p>
+    <p>
+        Utifrån denna grund är det samtidigt förvånande att så mycket fokus ägnats åt Docker. Där blev allt tvärtom väldigt hårt styrt: "Gör <em>precis</em> så här – och därmed basta." 
+        Dels skär sig det upplägget rejält med resten av kursen, som i och för sig har andra problem enligt ovan, och dels är det en tydlig svaghet att binda sig så hårt vid en (1) teknik, 
+        särskilt en som medfört så pass mycket krångel att få igång. Som tidigare nämnts så känns det lite som att någon hittat en hammare och plötsligt ser allt som spikar...
+    </p>
+    <p>
+        I korthet: Kursen behöver få ett mycket tydligare fokus – eller ens ett fokus över huvud taget – allra helst inriktat mycket mer mot frontend, 
+        samt tydligare riktlinjer och studie&shy;material. Det är alldeles för löst som det är nu.
+    </p>
+    <p><strong>Betyg:</strong> 6/10</p>
 </section>
