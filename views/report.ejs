@@ -503,7 +503,7 @@
     </p>
     <p>
         Jag hade rätt stora problem att få igång utvecklings&shy;miljön för klienten i början, men efter en del versions&shy;pillande och special&shy;lösningar 
-        började det rulla och jag kunde sätta igång och jobba. Därefter har det mesta flutit på bra, men det blev lite spännande när <code>npm</code> fick centrala problem alldeles i slutet, 
+        började det rulla och jag kunde sätta igång och jobba. Därefter har det mesta flutit på bra, men det blev lite spännande när <code>npm</code> centralt fick problem alldeles i slutet, 
         vilket dock löste sig snabbt.
     </p>
     <h5>Krav 1–3: Grunden</h5>
@@ -521,11 +521,11 @@
             vilket i sin tur beror på att jag inte haft tid eller möjlighet att få till en fungerande miljö för test med MongoDB.
         </li>
         <li>
-            Klientdelen är av naturliga skäl klurigare att testa och jag hade också betydande problem med att sätta upp testmiljön där, men jag har gjort vad jag kunnat med den tid jag haft att tillgå. 
+            Klientdelen är av naturliga skäl klurigare att testa och jag hade också betydande svårigheter med att sätta upp testmiljön där, men jag har gjort vad jag kunnat med den tid jag haft att tillgå. 
             Om inte annat så får de testfall som ändå finns fungera som demonstration av hur man kan gå tillväga för att testa Vue-komponenter; 
             sedan handlar det mest bara om att skriva koden.
         </li>
-        <li>Jag använder samma CI-tjänster som tidigare – dels av vana och på grund av igen&shy;kännbarhets&shy;faktorn, men också för att jag helt enkelt tycker de är rätt bra.</li>
+        <li>Jag använder samma CI-tjänster som tidigare, dels av vana och på grund av igen&shy;kännbarhets&shy;faktorn, men också för att jag helt enkelt tycker de är rätt bra.</li>
         
     </ul>
     <h5>Krav 4: Readme</h5>
@@ -535,6 +535,9 @@
         för att få till en S&G-version som passar just dem med så lite ansträngning som möjligt. Eftersom det rör sig om två samverkande delar blir det en del upprepning mellan filerna, 
         men tonvikten ligger på serverdelen.
     </p>
+    <p>
+        I serverrepot finns även en separat dokumentation av protokoll&shy;formatet och i klientrepot finns en separat artikel om Vue (se krav 6).
+    </p>
     <h5>Krav 5: Eget</h5>
     <p>
         Eftersom jag inte tyckte Docker-kravet var passande anför jag två alternativa åtaganden under denna rubrik:
@@ -543,10 +546,11 @@
     <p>
         Då det hela rör sig om ett fler&shy;persons&shy;spel med (minst) en central kontrollerande server ville jag gärna få upp applikationen någonstans publikt, 
         men begränsas av att inte ha tillgång till en egen server. Tyvärr är det också så att det är <em>betydligt</em> svårare att hitta en tjänst som erbjuder stöd för Node än för t.ex. PHP, 
-        särskilt på gratisnivå. De få som ändå finns har andra begränsningar, där t.ex. Heroku endast tillåter att man använder en (1) port som man dessutom inte kan välja själv.
+        särskilt på gratisnivå. De få som ändå finns har andra begränsningar, där t.ex. Heroku endast tillåter att man använder en (1) port som man dessutom inte kan välja själv, 
+        vilket gör dem svåra att använda för det här syftet.
     </p>
-        Det är också långt ifrån säkert att man kan köra MongoDB på ett vettigt sätt (eller åtminstone inte lokalt på samma maskin), så jag satte upp en gratisdatabas på 
-        <a href="https://mlab.com/" target="_blank">mLab</a>, vilket gick väldigt smidigt och fungerade direkt med server&shy;applikationen genom att ändra miljövariabeln <code>SG_DSN</code> 
+        Det är också långt ifrån säkert att man kan köra MongoDB på ett vettigt sätt (eller åtminstone inte lokalt på samma maskin), så jag satte istället upp en gratis&shy;databas på 
+        <a href="https://mlab.com/" target="_blank">mLab</a>, vilket gick väldigt smidigt och fungerade direkt med server&shy;applikationen genom att ändra miljö&shy;variabeln <code>SG_DSN</code> 
         som avsett.
     </p>
     <p>
@@ -566,7 +570,12 @@
     <p>
         Detta ligger väl i linje med hur själva koden är uppbyggd i båda delarna, där just självständighet och modularitet varit centrala designval – 
         närhelst möjligt har lösa kopplingar valts framför starka och händelse&shy;lyssnare utnyttjas i stor utsträckning. 
-        Se avsnittet "Technical discussion" i respektive readme-fil för mer ingående information om uppläggen, men utöver det får själva källkoden som sådan utgöra redovisningen av denna punkt.
+        Stor tonvikt har även lagts vid konfigurations&shy;möjligheter, där de vanligaste server&shy;inställningarna återfinns i en separat fil (<i>config.json</i>) 
+        och det erbjuds även ytterligare möjligheter att påverka främst serverns funktion med hjälp av argument i de funktionsanrop som initierar applikationens olika delar.
+    </p>
+    <p>
+        Se avsnittet "Technical discussion" i respektive readme-fil för mer ingående information om uppläggen, men utöver det får själva källkoden som sådan utgöra redovisningen av denna punkt, 
+        där JSDoc och beskrivande kommententarer används konsekvent och i stor utsträckning.
     </p>
     <h5>Krav 6: Ramverk</h5>
     <p>
@@ -590,12 +599,12 @@
         som överlag känts rätt enkel och rättfram att utveckla (även om den tagit en del tid i anspråk i och med att Vue var nytt för mig).
     </p>
     <p>
-        Som väntat har även min <code>ws-server</code>-modul fungerar ypperligt och utgjort en omistlig del i server&shy;applikationen. 
+        Som väntat har även min <code>ws-server</code>-modul fungerat ypperligt och utgjort en omistlig del i server&shy;applikationen. 
         Databas&shy;modulerna från Kmom05 har också fungerat bra, även om jag behövde uppdatera dem lite grann för att passa med version 3 av MongoDB-drivaren.
     </p>
     <p>
         Vad gäller projektet som sådant så var det helt och hållet nödvändigt att det gick att påbörja långt i förväg, vilket inte varit fallet i de tidigare kurserna. 
-        Detta gjorde även att jag vågade ta steget att göra just Skissa & Gissa igen, då jag kommer ihåg hur pass omfattande det blev förra gången – 
+        Det var detta som gjorde att jag vågade ta steget att göra just Skissa & Gissa igen, då jag kommer ihåg hur pass omfattande det blev förra gången – 
         och nu skulle det dessutom bli fråga om en hel radda nya tekniker att sätta sig in i. Med facit i hand gick det ändå bra, men det blev inte till att ligga på latsidan direkt – 
         och som jag skriver i "Limitations"-avsnitten i readme-filerna finns det ett antal saker jag skulle velat ta tag i och förbättra om jag haft mer tid på mig.
     </p>
@@ -606,21 +615,21 @@
     </p>
     <h5>Kursutvärdering</h5>
     <p>
-        Jag tycker inte riktigt att kursen har levt upp till sitt namn. Om man tittar på hur progressionen mellan kurserna sett ut tidigare år hade jag förväntat mig mer fokus på frontend här, 
+        Jag tycker inte riktigt att kursen har levt upp till sitt namn. Om man tittar på hur progressionen mellan dbwebb-kurserna sett ut tidigare år hade jag förväntat mig mer fokus på frontend här, 
         särskilt i och med att vi haft så mycket backend i flera kurser innan, men även utöver det tycker jag inte det varit speciellt mycket fokus på just <em>ramverk</em>. 
-        Det är synd, särskilt eftersom det känns som att det föreligger ett missat tillfälle <em>från BTH:s sida</em> att dyka ner ordentligt i den moderna JS-frontend&shy;världen, 
+        Det är synd, särskilt eftersom det känns som att det föreligger ett missat tillfälle att <em>från BTH:s sida</em> dyka ner ordentligt i den moderna JS-frontend&shy;världen, 
         som ju är väldigt spännande.
     </p>
     <p>
         Överlag har kursen gett ett obestämt intryck, då instruktionerna i många fall varit allt annat än klara. "Gör så här, eller också något helt annat. Välj själv." 
         Visst kan det låta bra med valfrihet, men frånvaron av styrning gör också att kursen känns allt mindre som just en <em>kurs</em> (i betydelsen <em>undervisning</em> eller <em>utbildning</em>) 
-        och mer som ett <em>fristående projekt&shy;arbete</em>. Var det verkligen meningen?
+        och mer som ett <em>fristående projekt&shy;arbete</em>. Var det verkligen det som var meningen?
     </p>
     <p>
         I värsta fall kan det ju faktiskt bli så att man inte lär sig speciellt mycket alls, om ens val – som alltså BTH här inte tar något ansvar för – visar sig mindre lämpliga, 
         eller att man förlorar mycket tid och kraft på att upptäcka att man hamnat i en återvänds&shy;gränd. 
         Eftersom man måste sköta allt frontend&shy;relaterat helt på egen hand är risken också stor att man missar mycket som annars kunde tagits upp där, 
-        med bättre styrning – eller åtminstone tips, förslag och exempel.
+        med bättre styrning – eller <em>åtminstone</em> tips, förslag och exempel.
     </p>
     <p>
         Utifrån denna grund är det samtidigt förvånande att så mycket fokus ägnats åt Docker. Där blev allt tvärtom väldigt hårt styrt: "Gör <em>precis</em> så här – och därmed basta." 
