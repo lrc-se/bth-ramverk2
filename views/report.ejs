@@ -498,13 +498,21 @@
 <section id="kmom10">
     <h2>Kmom10</h2>
     <p>
+        Puh, mycket skriva blev det...
+    </p>
+    <p>
         Mitt val av <a href="/app">applikation</a> är alltså en onlinevariant av spelet <i>Skissa &amp; Gissa</i>, där deltagarna skall gissa på ord som de andra försöker rita, 
         och utgör en vidare&shy;utveckling av den kodbas som påbörjats tidigare i kursen.
     </p>
     <p>
-        Jag hade rätt stora problem att få igång utvecklings&shy;miljön för klienten i början, men efter en del versions&shy;pillande och special&shy;lösningar 
-        började det rulla och jag kunde sätta igång och jobba. Därefter har det mesta flutit på bra, men det blev lite spännande när <code>npm</code> centralt fick problem alldeles i slutet, 
-        vilket dock löste sig snabbt.
+        Till klienten använde jag mig av <a href="https://github.com/vuejs/vue-cli" target="_blank"><code>vue-cli</code></a> för att sätta upp utvecklings&shy;miljön. 
+        Jag hade rätt stora problem med att få till detta i början, men efter en del versions&shy;pillande och special&shy;lösningar 
+        började det rulla och jag kunde sätta igång och jobba. Därefter har det mesta flutit på bra, även om jag fick förlita mig på Debian-VM:en för att kunna köra klienttesten lokalt. 
+        Nåväl, bara det fungerar...
+    </p>
+    <p>
+        Det blev också lite spännande i slutet på grund av att <code>npm</code> centralt fick problem, plus en del sista minuten-buggar och -förändringar alldeles innan deadline, 
+        men det löste sig det med.
     </p>
     <h5>Krav 1–3: Grunden</h5>
     <p>
@@ -515,6 +523,8 @@
        Att notera: 
     </p>
     <ul>
+        <li>Både gissare och ritare får poäng vid en korrekt gissning, i förhållandet 2:1, och poängen baseras på hur lång tid som återstår av nedräkningen.</li>
+        <li>Både klienten och servern kan känna av och hantera om och när anslutningen mot en motpart oväntat går ner. Detta gäller även i kontakten med databasen, för både läsning och skrivning.</li>
         <li>Docker används endast i serverdelen och är där inte heller strikt <em>nödvändigt</em>, men alla relaterade krav i uppgiften är uppfyllda.</li>
         <li>
             Serverdelen har god kodtäckning, där det främst är databasdelarna som inte är med, 
@@ -523,7 +533,7 @@
         <li>
             Klientdelen är av naturliga skäl klurigare att testa och jag hade också betydande svårigheter med att sätta upp testmiljön där, men jag har gjort vad jag kunnat med den tid jag haft att tillgå. 
             Om inte annat så får de testfall som ändå finns fungera som demonstration av hur man kan gå tillväga för att testa Vue-komponenter; 
-            sedan handlar det mest bara om att skriva koden.
+            sedan handlar det mest bara om att skriva koden...
         </li>
         <li>Jag använder samma CI-tjänster som tidigare, dels av vana och på grund av igen&shy;kännbarhets&shy;faktorn, men också för att jag helt enkelt tycker de är rätt bra.</li>
         
@@ -555,8 +565,8 @@
     </p>
     <p>
         I slutändan fick jag förlita mig på studentservern även denna gång, vilket dock medförde ett annat problem: utgående anslutningar är spärrade, 
-        vilket gjorde att mLab-databasen inte gick att nå. Eftersom applikationen fungerar bra i övrigt och kan hantera en fallerad databas&shy;koppling utan problem fick detta dock vara hänt; 
-        kanske löser det sig vid ett senare tillfälle.
+        vilket gjorde att mLab-databasen inte gick att nå. Eftersom applikationen fungerade bra i övrigt och kan hantera en fallerad databas&shy;koppling utan problem fick detta dock vara hänt, 
+        men med lite hjälp från BTH:s IT-avdelning (via <i>mos</i>) löste det sig till slut i alla fall.
     </p>
     <p>
         <a href="http://www.student.bth.se/~kabc16/dbwebb-kurser/ramverk2/me/app/client/dist/index.html">Spela S&G här!</a>
@@ -569,13 +579,13 @@
     </p>
     <p>
         Detta ligger väl i linje med hur själva koden är uppbyggd i båda delarna, där just självständighet och modularitet varit centrala designval – 
-        närhelst möjligt har lösa kopplingar valts framför starka och händelse&shy;lyssnare utnyttjas i stor utsträckning. 
+        närhelst möjligt har lösa kopplingar valts framför starka och händelse&shy;lyssnare nyttjas i stor utsträckning. 
         Stor tonvikt har även lagts vid konfigurations&shy;möjligheter, där de vanligaste server&shy;inställningarna återfinns i en separat fil (<i>config.json</i>) 
         och det erbjuds även ytterligare möjligheter att påverka främst serverns funktion med hjälp av argument i de funktionsanrop som initierar applikationens olika delar.
     </p>
     <p>
         Se avsnittet "Technical discussion" i respektive readme-fil för mer ingående information om uppläggen, men utöver det får själva källkoden som sådan utgöra redovisningen av denna punkt, 
-        där JSDoc och beskrivande kommententarer används konsekvent och i stor utsträckning.
+        där JSDoc och beskrivande kommentarer används konsekvent och i stor utsträckning.
     </p>
     <h5>Krav 6: Ramverk</h5>
     <p>
@@ -596,7 +606,7 @@
     <p>
         Mer specifikt så känns kodstrukturen mycket bättre den här gången, vilket delvis (men inte helt) är ett resultat av uppbyggnaden hos de ingående ramverken/<wbr>verktygen
         liksom hos JavaScript självt. Jag är särskilt nöjd med den uppnådda graden av modularitet och användandet av händelser, speciellt i klienten, 
-        som överlag känts rätt enkel och rättfram att utveckla (även om den tagit en del tid i anspråk i och med att Vue var nytt för mig).
+        som överlag känts rätt enkel och rättfram att utveckla även om den tagit en del tid i anspråk i och med att Vue var nytt för mig.
     </p>
     <p>
         Som väntat har även min <code>ws-server</code>-modul fungerat ypperligt och utgjort en omistlig del i server&shy;applikationen. 
@@ -610,14 +620,14 @@
     </p>
     <p>
         Sammantaget blev det till slut ett bra projekt som knöt ihop kursens innehåll på ett bra sätt, men det var inte helt lätt att komma fram till projektidén – 
-        det är det som är faran när det sätts upp för vaga krav. Jag har sagt det förut och jag säger det igen: Är det meningen att projektet skall examinera studenternas 
-        <em>tekniska kunskap</em> och <em>problem&shy;lösnings&shy;förmåga</em>, eller deras <em>fantasi</em> och fallenhet för <em>spontan kreativitet</em>?
+        det är det som är faran när det sätts upp för vaga krav utan konkreta riktlinjer. Jag har sagt det förut och jag säger det igen: Är det meningen att projektet skall examinera studenternas 
+        <em>tekniska kunskap</em> och <em>problem&shy;lösnings&shy;förmåga</em> inom kursens område, eller deras <em>fantasi</em> och fallenhet för <em>spontan kreativitet</em>?
     </p>
     <h5>Kursutvärdering</h5>
     <p>
         Jag tycker inte riktigt att kursen har levt upp till sitt namn. Om man tittar på hur progressionen mellan dbwebb-kurserna sett ut tidigare år hade jag förväntat mig mer fokus på frontend här, 
         särskilt i och med att vi haft så mycket backend i flera kurser innan, men även utöver det tycker jag inte det varit speciellt mycket fokus på just <em>ramverk</em>. 
-        Det är synd, särskilt eftersom det känns som att det föreligger ett missat tillfälle att <em>från BTH:s sida</em> dyka ner ordentligt i den moderna JS-frontend&shy;världen, 
+        Det är synd, särskilt eftersom det känns som att det föreligger ett missat tillfälle här att <em>från BTH:s sida</em> dyka ner ordentligt i den moderna JS-frontend&shy;världen, 
         som ju är väldigt spännande.
     </p>
     <p>
@@ -634,7 +644,7 @@
     <p>
         Utifrån denna grund är det samtidigt förvånande att så mycket fokus ägnats åt Docker. Där blev allt tvärtom väldigt hårt styrt: "Gör <em>precis</em> så här – och därmed basta." 
         Dels skär sig det upplägget rejält med resten av kursen, som i och för sig har andra problem enligt ovan, och dels är det en tydlig svaghet att binda sig så hårt vid en (1) teknik, 
-        särskilt en som medfört så pass mycket krångel att få igång. Som tidigare nämnts så känns det lite som att någon hittat en hammare och plötsligt ser allt som spikar...
+        särskilt en som varit förknippad med så pass mycket krångel att få igång. Som tidigare nämnts så känns det lite som att någon hittat en hammare och plötsligt ser allt som spikar...
     </p>
     <p>
         I korthet: Kursen behöver få ett mycket tydligare fokus – eller ens ett fokus över huvud taget – allra helst inriktat mycket mer mot frontend, 
